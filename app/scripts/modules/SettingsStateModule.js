@@ -26,14 +26,14 @@ class SettingsStateModule {
             }
         })
         let storageStatus = storageAvailable();
-        console.log(storageStatus)
+        //console.log(storageStatus)
         let mergedState = this.DefaultSettingState;
         if (storageStatus[0] == 1 && localStorage.getItem('localStorageSettings') == null) {
             localStorage.setItem('localStorageSettings', window.btoa(JSON.stringify(this.DefaultSettingState)));
         } else if (storageStatus[0] == 1 && localStorage.getItem('localStorageSettings') != null) {
             this.localStorageSettings = JSON.parse(window.atob(localStorage.getItem('localStorageSettings')));
             if (this.localStorageSettings.settingsBundleVersion.split('.')[0] == this.DefaultSettingState['settingsBundleVersion'].split('.')[0]) {
-                console.log(this.localStorageSettings)
+                //console.log(this.localStorageSettings)
                 mergedState = Object.assign(this.DefaultSettingState, this.localStorageSettings);
             } else {
                 localStorage.setItem('localStorageSettings', window.btoa(JSON.stringify(this.DefaultSettingState)));

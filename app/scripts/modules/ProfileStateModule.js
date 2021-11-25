@@ -45,7 +45,7 @@ class ProfileStateModule {
         let color = uiColors.profileColors[Math.floor(Math.random() * uiColors.profileColors.length - 1)]
         let word = superb.random();
         word = word[0].toUpperCase() + word.substring(1);
-        console.log(emoji, index, emojis.length)
+        //console.log(emoji, index, emojis.length)
         return [word + ' ' + emoji.name, emoji.emoji, color];
     }
 }

@@ -14,7 +14,7 @@ class SharedStateModule {
     currentUsers = [];
     constructor(url) {
         window.addEventListener('SystemStateEvent-CollaborationModule-ManagePeopleButton', (e) => {
-            console.log(e)
+            //console.log(e)
             switch (this.sharedStatus) {
                 case 0: {
                     new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], [
@@ -37,10 +37,71 @@ class SharedStateModule {
                     ]);
                     break;
                 }
+                case 1: {
+                    let menuArr = [
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/sharescreen',
+                            onSelected: () => {
+                                console.log('end')
+                            },
+                            name: intl.str('app.sharemodule.endsharing')
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/person',
+                            onSelected: () => {
+                                this.#editProfile();
+                            },
+                            name: intl.str('app.sharemodule.editProfile')
+                        },
+                        {
+                            type: 'seperator',
+                        }
+                    ];
+                    window.sharedState.currentUsers.forEach(user => {
+                        //if (user.id !== window.ProfileState.userProfile.id) {
+                        menuArr.push({
+                            type: 'menuElement',
+                            icon: 'ui/person',
+                            onSelected: () => {
+                                console.log(user)
+                            },
+                            name: user.name
+                        })
+                        //}
+                    })
+                    new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], menuArr);
+                    break;
+                }
+                case 2: {
+                    let menuArr = [
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/person',
+                            onSelected: () => {
+                                this.#editProfile();
+                            },
+                            name: intl.str('app.sharemodule.editProfile')
+                        }
+                    ];
+                    window.sharedState.currentUsers.forEach(user => {
+                        menuArr.push({
+                            type: 'menuElement',
+                            icon: 'ui/person',
+                            onSelected: () => {
+                                console.log(user)
+                            },
+                            name: user.name
+                        })
+                    })
+                    new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], menuArr);
+                    break;
+                }
             }
-        })
+        });
         if (url) {
-            console.log(url.split('+'))
+            //console.log(url.split('+'))
             this.#joinDocument(url.split('+'))
         }
     }
@@ -63,7 +124,7 @@ class SharedStateModule {
                                 });
                                 break;
                             default:
-                                console.log('Looks like there was a problem. Status Code: ' + response.status)
+                                //console.log('Looks like there was a problem. Status Code: ' + response.status)
                                 callback({
                                     code: response.status,
                                 })
@@ -96,7 +157,7 @@ class SharedStateModule {
             try {
                 let urlstr = new URL(this.serverURL);
                 urlstr.pathname = '';
-                console.log(urlstr.toString(), addr)
+                //console.log(urlstr.toString(), addr)
                 window.sharedState.socketInstance = io(urlstr.toString() + "document-" + id, {
                     path: addr,
                     query: {
@@ -105,18 +166,18 @@ class SharedStateModule {
                 });
 
                 window.sharedState.socketInstance.on("connect", () => {
-                    console.log('socket connected')
+                    //console.log('socket connected')
                 });
                 window.sharedState.socketInstance.on("SharedStateRelay-DSMG-ioComm", (name, args) => {
-                    console.log('socket recieved can', name, args)
+                    //console.log('socket recieved can', name, args)
                     window.dispatchEvent(new CustomEvent(name, { detail: args }))
                 });
                 window.addEventListener('SharedStateRelay-DSMG-ioComm', (e) => {
-                    console.log('socket emit', e.detail)
+                    //console.log('socket emit', e.detail)
                     window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioComm', e.detail.name, e.detail.args);
                 });
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioConnectivity-NewUser', (userProfile) => {
-                    console.log('socket newUser', userProfile, window.sharedState.currentUsers);
+                    //console.log('socket newUser', userProfile, window.sharedState.currentUsers);
                     window.sharedState.currentUsers.push(userProfile);
                 });
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioDocumentStateUpdateGet', () => {
@@ -188,11 +249,11 @@ class SharedStateModule {
                             sharedHUI.setScreen(0);
                             window.ProfileState.updateUserProfile(document.querySelector('section.setProfile section.userprofile-header>input').value, document.querySelector('section.setProfile section.userprofile-header>.emojicont').innerText, document.querySelector('section.setProfile section.userprofile-header>.emojicont').style.backgroundColor);
                             this.#socketTools.connectToSocket(status.data.socketAddr, window.DocumentState.id, () => {
-                                console.log(this.socketInstance)
+                                //console.log(this.socketInstance)
                                 this.socketInstance.emit("SharedStateRelay-DSMG-ioConnectivityCheck", () => {
                                     const url = new URL(window.location.href);
                                     url.hash = window.btoa(window.DocumentState.id + '+' + window.SettingsStateModule["collaboration.server.defaultServerURL"]);
-                                    console.log(url.toString()); // ok
+                                    //console.log(url.toString()); // ok
                                     this.sharedStatus = 1;
                                     document.querySelector('[uie-ref="shareDialogReplace"]').innerHTML = '<h1>Here\'s your link: </h1><code>' + url.toString() + '</code><p>Click to copy the link. <br/>Use the link to join this document. This link will expire when you close the document.</p>';
                                     document.querySelector('main.uie-dialog .uie-simpledialog-button').innerText = 'Close';
@@ -230,7 +291,7 @@ class SharedStateModule {
                     sharedHUI.setScreen(0);
                     window.ProfileState.updateUserProfile(document.querySelector('section.joinProfile section.userprofile-header>input').value, document.querySelector('section.joinProfile section.userprofile-header>.emojicont').innerText, document.querySelector('section.joinProfile section.userprofile-header>.emojicont').style.backgroundColor);
                     this.#socketTools.connectToSocket(status.data.socketAddr, id[0], () => {
-                        console.log(this.socketInstance)
+                        //console.log(this.socketInstance)
                         this.socketInstance.emit("SharedStateRelay-DSMG-ioConnectivityCheck", (intl) => {
                             /*intl = {
                                 currentUsers: [{
@@ -240,12 +301,12 @@ class SharedStateModule {
                             }
                             */
                             this.currentUsers = intl.currentUsers;
-                            console.log(this.currentUsers)
+                            //console.log(this.currentUsers)
                             this.sharedStatus = 2
                             sharedHUI.destroy();
                         });
                         this.socketInstance.once("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
-                            console.log(documentState);
+                            //console.log(documentState);
                             window.DocumentState.elements = JSON.parse(documentState).elements;
                             window.dispatchEvent(new Event('DocumentStateEvent-ReloadAllElements'));
 

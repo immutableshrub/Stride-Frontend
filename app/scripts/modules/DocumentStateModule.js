@@ -18,9 +18,9 @@ class DocumentStateModule {
         log.debug("📦 Document State Manager", "Document State Manager is initalising...", uiColors.pink)
         if (documentPotentialState) {
             log.info("📦 Document State Manager", "Document State Manager is loading document " + documentPotentialState.id, uiColors.pink);
-            console.log(documentPotentialState)
+            //console.log(documentPotentialState)
             this.documentState = documentPotentialState;
-            console.log(this.DocumentState)
+            //console.log(this.DocumentState)
         } else {
             log.info("📦 Document State Manager", "Document State Manager is creating new document", uiColors.pink);
             this.documentState = {
@@ -65,7 +65,7 @@ class DocumentStateModule {
                 }
             }))
 
-            console.log(e.detail)
+            //console.log(e.detail)
             if (!e.detail.remote) {
                 window.dispatchEvent(new CustomEvent('SharedStateRelay-DSMG-ioComm', {
                     detail: {
@@ -129,6 +129,7 @@ class DocumentStateModule {
                 }
             }))
         }, false);
+        document.querySelector('title').innerText = this.documentState.name + ' - Stride';
         log.success("📦 Document State Manager", "Successfully initalised a new DocumentStateManager for document " + DocumentState.id, uiColors.pink)
     }
 }

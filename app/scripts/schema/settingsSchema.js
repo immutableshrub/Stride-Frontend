@@ -1,5 +1,5 @@
 const settingsSchema = {
-    settingsBundleVersion: '3.0.0',
+    settingsBundleVersion: '4.0.0',
     settings: [
         {
             prop: 'header',
@@ -58,7 +58,7 @@ const settingsSchema = {
             name: 'Default Server URL',
             description: 'The default server URL to use when connecting or sharing a whiteboard.',
             type: 'string',
-            default: 'https://localhost:1674/collab/server'
+            default: 'https://stride-backendservice.herokuapp.com/collab/server'
         },
         {
             prop: 'setting',

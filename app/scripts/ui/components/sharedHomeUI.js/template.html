@@ -1,0 +1,312 @@
+<style>
+    main.uie-shui.uie-outer {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+        animation: shui-in 0.5s cubic-bezier(.86, 0, .07, 1);
+        transform: scale(1);
+        opacity: 1;
+        pointer-events: all;
+        background-color: #ffffff;
+        z-index: 99999;
+    }
+
+    @keyframes shui-in {
+        from {
+            transform: scale(1.2);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+
+
+    @keyframes shui-slidein {
+        from {
+            transform: translateX(100%);
+            opacity: 1;
+            pointer-events: none;
+        }
+
+        to {
+            transform: translateX(0%);
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+
+
+    main.uie-shui.uie-outer.hidden {
+        transform: scale(1.2);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    main.uie-shui.uie-outer>section {
+        display: none;
+        opacity: 0;
+        pointer-events: none;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+        transform: translateX(-100%);
+    }
+
+    main.uie-shui.uie-outer section.loader {
+        align-items: center;
+        justify-content: center;
+        transform: translateX(0%);
+    }
+
+    main.uie-shui.uie-outer[data-state="0"] section.loader {
+        display: flex;
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    main.uie-shui.uie-outer section.setProfile {
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+
+    }
+
+    main.uie-shui.uie-outer[data-state="1"] section.setProfile {
+        display: flex;
+        opacity: 1;
+        pointer-events: all;
+        flex-flow: column;
+        transform: translateX(0%);
+        animation: shui-slidein 0.5s cubic-bezier(.86, 0, .07, 1);
+    }
+
+    main.uie-shui.uie-outer section.setProfile>section {
+        display: flex;
+        flex-flow: column;
+        margin-top: 50px;
+        align-items: center;
+    }
+
+    main.uie-shui.uie-outer section.editProfile {
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+
+    }
+
+    main.uie-shui.uie-outer[data-state="2"] section.editProfile {
+        display: flex;
+        opacity: 1;
+        pointer-events: all;
+        flex-flow: column;
+        transform: translateX(0%);
+        animation: shui-slidein 0.5s cubic-bezier(.86, 0, .07, 1);
+    }
+
+    main.uie-shui.uie-outer section.editProfile>section {
+        display: flex;
+        flex-flow: column;
+        margin-top: 50px;
+        align-items: center;
+    }
+
+    section.joinerHeader p {
+        margin-bottom: 0px;
+    }
+
+    section.joinerHeader p span {
+        font-weight: 600;
+    }
+
+    section.joinerHeader h1 {
+        font-weight: 600;
+        margin-top: 0px;
+    }
+
+
+    main.uie-shui.uie-outer section.joinProfile {
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+    }
+
+    main.uie-shui.uie-outer[data-state="3"] section.joinProfile {
+        display: flex;
+        opacity: 1;
+        pointer-events: all;
+        flex-flow: column;
+        transform: translateX(0%);
+        animation: shui-slidein 0.5s cubic-bezier(.86, 0, .07, 1);
+    }
+
+    main.uie-shui.uie-outer section.joinProfile>section {
+        display: flex;
+        flex-flow: column;
+        margin-top: 50px;
+        align-items: center;
+    }
+
+
+    main.uie-shui.uie-outer[data-state="4"] section.setSharingDetails {
+        pointer-events: all;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        flex-flow: column;
+    }
+
+    main.uie-shui.uie-outer[data-state="4"] section.setSharingDetails {
+        display: flex;
+        opacity: 1;
+        pointer-events: all;
+        transform: translateX(0%);
+        animation: shui-slidein 0.5s cubic-bezier(.86, 0, .07, 1);
+    }
+
+    main.uie-shui.uie-outer section.setSharingDetails>section.joiner {
+        display: flex;
+        flex-flow: row;
+        margin-top: 50px;
+        width: 300px;
+        max-width: calc(50vw - 50px);
+    }
+
+    section.userprofile-header>.emojicont {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        background-color: #000000;
+        font-size: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    section.userprofile-header>input {
+        border: none;
+        font-size: 20px;
+        text-decoration: underline;
+        text-align: center;
+        width: 400px;
+        max-width: calc(100vw - 50px);
+        outline: 0px solid;
+        background-color: #ffffff;
+        margin: 20px 0px;
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+    }
+
+    section.userprofile-header>input:hover,
+    section.userprofile-header>input:active,
+    section.userprofile-header>input:focus {
+        background-color: #eeeeee;
+        text-decoration: none;
+    }
+
+    section.userprofile-header>.emojicont:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: #00000000;
+        background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 4.5a7.5 7.5 0 1 1-7.419 6.392c.067-.454-.265-.892-.724-.892a.749.749 0 0 0-.752.623A9 9 0 1 0 6 5.292V4.25a.75.75 0 0 0-1.5 0v3c0 .414.336.75.75.75h3a.75.75 0 0 0 0-1.5H6.9a7.473 7.473 0 0 1 5.1-2Z' fill='%23ffffff'/%3E%3C/svg%3E");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 0px;
+        cursor: pointer;
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+    }
+
+    section.userprofile-header>.emojicont:hover:after {
+        background-color: #0000005c;
+        background-size: 50px;
+    }
+
+
+    .uie-shui button {
+        display: flex;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        align-items: center;
+        background: none;
+        border: 1px solid #bebebe;
+        outline: none;
+        min-width: 100px;
+        text-align: center;
+        justify-content: center;
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+        margin-top: 10px
+    }
+
+    .uie-shui button:hover {
+        background-color: #eeeeee;
+    }
+</style>
+
+<main class="uie-shui uie-outer hidden" data-state="0" data-emoji="" data-emojiColor="">
+    <section class="loader">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="uie-circleLoader">
+            <circle cx="50" cy="50" r="45"></circle>
+        </svg>
+    </section>
+    <section class="setProfile">
+        <section class="joinerHeader">
+            <p>Sharing <span></span></p>
+            <h1 class="docName">Your profile</h1>
+        </section>
+        <section class="userprofile-header">
+            <div class="emojicont"></div>
+            <input type="text" name="Name" id="inputname_0"></input>
+            <label for="inputname_0">Your name and avatatr will be visible to others on this document.</label>
+            <button>Continue</button>
+        </section>
+    </section>
+    <section class="editProfile">
+        <section class="joinerHeader">
+            <p>Sharing <span></span></p>
+            <h1 class="docName">Your profile</h1>
+        </section>
+        <section class="userprofile-header">
+            <div class="emojicont"></div>
+            <input type="text" name="Name" id="inputname_0"></input>
+            <label for="inputname_0">Your name and avatatr will be visible to others on this document.</label>
+            <button>Save</button>
+        </section>
+    </section>
+    <section class="joinProfile">
+        <section class="joinerHeader">
+            <p>Joining a shared document. <span></span></p>
+            <h1 class="docName">-</h1>
+        </section>
+        <section class="userprofile-header">
+            <div class="emojicont"></div>
+            <input type="text" name="Name" id="inputname_0"></input>
+            <label for="inputname_0">Your name and avatatr will be visible to others on this document.</label>
+            <button>Save</button>
+        </section>
+    </section>
+    <section class="setSharingDetails">
+        <section class="joinerHeader">
+            <p>Sharing <span></span></p>
+            <h1 class="docName">
+                All set.
+            </h1>
+        </section>
+        <section class="joiner">
+            <p class="link">Use the following link</p>
+            <button>Save</button>
+        </section>
+    </section>
+</main>

@@ -1,0 +1,201 @@
+<style>
+    main.uie-dialog[uie-ref="dialogBackdrop"] {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+        background-color: #00000061;
+        z-index: 201;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+        opacity: 1;
+        pointer-events: all;
+        pointer-events: all;
+    }
+
+    .uie-simpledialog.uie-simplelargedialog section {
+        max-height: calc(100% - 100px);
+        height: max-content;
+    }
+
+    main.uie-dialog[uie-ref="dialogBackdrop"]>section {
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    main.uie-dialog[uie-ref="dialogBackdrop"].hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    main.uie-dialog[uie-ref="dialogBackdrop"].hidden>section {
+        transform: translateY(10%) scale(0.8);
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+        opacity: 0;
+    }
+
+    section[uie-ref="dialogElement"] * {
+        touch-action: auto;
+    }
+
+    section[uie-ref="dialogElement"] {
+        touch-action: auto;
+        width: 700px;
+        height: 400px;
+        max-width: calc(100vw - 100px);
+        max-height: calc(100vh - 100px);
+        align-items: center;
+        display: flex;
+        flex-flow: column;
+        box-shadow:
+            0.3px 0.5px 0.6px hsl(0deg 0% 74% / 0.3),
+            0.8px 1.6px 1.8px -0.5px hsl(0deg 0% 74% / 0.28),
+            1.5px 3px 3.3px -1px hsl(0deg 0% 74% / 0.26),
+            2.6px 5.2px 5.8px -1.4px hsl(0deg 0% 74% / 0.24),
+            4.4px 8.8px 9.8px -1.9px hsl(0deg 0% 74% / 0.22),
+            7.2px 14.4px 16.1px -2.4px hsl(0deg 0% 74% / 0.21),
+            11.3px 22.6px 25.2px -2.9px hsl(0deg 0% 74% / 0.19),
+            17px 34px 37.9px -3.3px hsl(0deg 0% 74% / 0.17);
+        border: 1px solid #cdcdcd;
+        border-radius: 6px;
+        position: relative;
+        overflow-y: auto;
+        background-color: #ffffff;
+    }
+
+    section[uie-ref="dialogElement"] header {
+        background-color: #ffffff;
+        width: 100%;
+        border-bottom: 1px solid #cdcdcd;
+        display: flex;
+        flex-flow: row;
+        position: sticky;
+        top: 0px;
+        z-index: 1000;
+    }
+
+    section[uie-ref="dialogElement"] footer {
+        margin-top: auto;
+        width: 100%;
+        border-top: 1px solid #cdcdcd;
+        display: flex;
+        flex-flow: row;
+        justify-content: end;
+        position: relative;
+        height: 3rem;
+    }
+
+    section[uie-ref="dialogElement"] header p {
+        display: flex;
+        align-items: center;
+        margin: 10px 0px
+    }
+
+    section[uie-ref="dialogElement"] header p span {
+        font-weight: 700 !important;
+        font-size: 1.2em;
+        margin-top: 6px;
+    }
+
+    section[uie-ref="dialogElement"] header p svg {
+        margin: 0px 15px;
+    }
+
+    section[uie-ref="dialogElement"] article[uie-ref="body"] {
+        padding: 20px;
+        width: calc(100% - 40px);
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: calc(100% - 100px);
+    }
+
+    section[uie-ref="dialogElement"] footer button {
+        height: 100%;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0px;
+        border: 0px;
+        margin: 0px;
+        padding: 10px 50px;
+        background-color: transparent;
+        cursor: pointer;
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+        position: relative;
+        outline: 0px solid;
+    }
+
+    section[uie-ref="dialogElement"] header button[uie-ref="close"] {
+        position: absolute;
+        right: 0px;
+        height: 100%;
+        aspect-ratio: 1/1;
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 0px;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        background-color: transparent;
+        cursor: pointer;
+        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+        outline: 0px solid;
+    }
+
+    section[uie-ref="dialogElement"] header button[uie-ref="close"]:before,
+    section[uie-ref="dialogElement"] footer button:before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        background-color: #bebebe;
+        transition: transform 0.5s cubic-bezier(.86, 0, .07, 1), border-radius 0.5s cubic-bezier(.86, 0, .07, 1), opacity 0.2s linear;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: -1;
+        border-radius: 6px;
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    section[uie-ref="dialogElement"] header button[uie-ref="close"]:hover:before,
+    section[uie-ref="dialogElement"] header button[uie-ref="close"]:focus:before,
+    section[uie-ref="dialogElement"] footer button:hover:before,
+    section[uie-ref="dialogElement"] footer button:focus:before {
+        border-radius: 6px;
+        opacity: 0.4;
+        transform: scale(0.85);
+    }
+
+    section[uie-ref="dialogElement"] header button[uie-ref="close"]:active:before,
+    section[uie-ref="dialogElement"] footer button:active:before {
+        border-radius: 0px;
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    section[uie-ref="dialogElement"] footer button:last-child:active:before {
+        border-radius: 0px 0px 5px 0px;
+        opacity: 0.5;
+        transform: scale(1);
+    }
+</style>
+
+<main class="uie-dialog hidden" uie-ref="dialogBackdrop">
+    <section uie-ref="dialogElement">
+        <header>
+            <p uie-ref="header"></p>
+            <button uie-ref="close"></button>
+        </header>
+        <article uie-ref="body"></article>
+        <footer uie-ref="buttons"></footer>
+    </section>
+</main>

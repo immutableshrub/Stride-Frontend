@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+</head>
+
+<body>
+  <div class="app"></div>
+  <main class="loader" data-state="1" uie-ref="LoaderWrapper" style="display: none;">
+    <section class="logoDisplay">
+      <img src="/app/styles/static/logos/Stride_Mark.svg?url" />
+      <div class="logoWrapper">
+        <img src="/app/styles/static/logos/Stride_text.svg?url" />
+      </div>
+    </section>
+    <div class="spinnerWait">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="uie-circleLoader">
+        <circle cx="50" cy="50" r="45"></circle>
+      </svg>
+    </div>
+  </main>
+  <script type="module" src="/app/scripts/main.js"></script>
+</body>
+
+</html>

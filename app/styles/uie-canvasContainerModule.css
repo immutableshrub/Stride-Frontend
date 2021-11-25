@@ -1,0 +1,18 @@
+div[uie-ref="canvasContinerModule"] {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 200vw;
+    height: 200vh;
+    overflow: hidden;
+}
+
+div[uie-ref="canvasContinerModule"]::-webkit-scrollbar {
+    display: none;
+}
+
+div[uie-ref="canvasContinerModule"] svg:nth-child(2) {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+}

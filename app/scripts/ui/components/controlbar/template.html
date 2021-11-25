@@ -1,0 +1,219 @@
+<style>
+    *,
+    *:before,
+    *:after {
+        --controlbar-margin-documentUI: var(--uiTheme-layout-margin-documentUI);
+        --controlbar-button-size: 60px;
+        --controlbar--background-color: var(--uiTheme-background-primary);
+        --controlbar--background-color-hover: var(--uiTheme-background-hover);
+        --controlbar--border-color: var(--uiTheme-border-primary);
+        --controlbar--animation-easing: var(--uiTheme-animations-easing-primary);
+    }
+
+    @keyframes controlbar-button-in {
+        from {
+            width: 0px;
+            opacity: 0;
+        }
+
+        to {
+            width: var(--controlbar-button-size);
+            opacity: 1;
+        }
+    }
+
+    @keyframes controlbar-spacer-in {
+        from {
+            width: 0px;
+            opacity: 0;
+        }
+
+        to {
+            width: 10px;
+            opacity: 1;
+        }
+    }
+
+    aside.uiElement.uie-uiControlbar[uie-ref="controlbar-outer"] {
+        position: fixed;
+        border: 1px solid var(--controlbar--border-color);
+        background-color: var(--controlbar--background-color);
+        border-radius: 6px;
+        overflow: hidden;
+        transition: 0.5s var(--controlbar--animation-easing);
+        --transformString: "";
+    }
+
+    aside.uiElement.uie-uiControlbar[uie-ref="controlbar-outer"][uie-prop-barposition="0"] {
+        bottom: var(--controlbar-margin-documentUI);
+        left: 50%;
+        --transformString: translateX(-50%);
+        /*transform: translateX(-50%);*/
+    }
+
+    aside.uiElement.uie-uiControlbar[uie-ref="controlbar-outer"][uie-prop-barstate="0"] {
+        opacity: 0.5;
+        transform: var(--transformString);
+        pointer-events: none;
+    }
+
+    aside.uiElement.uie-uiControlbar[uie-ref="controlbar-outer"][uie-prop-barstate="1"] {
+        opacity: 1;
+        transform: var(--transformString) scale(1);
+        pointer-events: all;
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"] {
+        display: block;
+        width: var(--controlbar-button-size);
+        height: var(--controlbar-button-size);
+        border-radius: 0px;
+        border: 0px;
+        margin: 0px;
+        padding: 0px;
+        background-color: transparent;
+        cursor: pointer;
+        animation: controlbar-button-in 0.5s var(--controlbar--animation-easing);
+        transition: 0.5s var(--controlbar--animation-easing);
+        position: relative;
+    }
+
+    aside.uiElement.uie-uiControlbar[uie-ref="controlbar-outer"] button[uie-ref="controlbar-toolSelector-button"]:not([disableOpacity="1"])>[uie-ref="controlbar-toolSelector-toolicon"] {
+        opacity: 0.75;
+    }
+
+    aside.uiElement.uie-uiControlbar[uie-ref="controlbar-outer"]:hover button[uie-ref="controlbar-toolSelector-button"]>[uie-ref="controlbar-toolSelector-toolicon"],
+    aside.uiElement.uie-uiControlbar[uie-ref="controlbar-outer"]:focus button[uie-ref="controlbar-toolSelector-button"]>[uie-ref="controlbar-toolSelector-toolicon"] {
+        opacity: 1;
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"]>* {
+        transition: 0.5s var(--controlbar--animation-easing);
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"][isSelected="1"][isWorkspaceTool="1"]>[uie-ref="controlbar-toolSelector-toolicon"] {
+        transform: translateY(5px);
+        opacity: 1 !important;
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"]:before {
+        content: "";
+        width: var(--controlbar-button-size);
+        height: var(--controlbar-button-size);
+        background-color: var(--controlbar--background-color-hover);
+        transition: transform 0.5s var(--controlbar--animation-easing), border-radius 0.5s var(--controlbar--animation-easing), opacity 0.2s linear;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: -1;
+        border-radius: 6px;
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"]:hover:before,
+    button[uie-ref="controlbar-toolSelector-button"]:focus:before {
+        border-radius: 6px;
+        opacity: 0.4;
+        transform: scale(0.85);
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"]:active:before {
+        border-radius: 0px;
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"][isSelected="1"]:before {
+        border-radius: 0px;
+        opacity: 0.25;
+        transform: scale(1);
+    }
+
+    section[uie-ref="controlbar-toolSelector"] {
+        display: flex;
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"][showArrow="1"]:after {
+        content: '';
+        background-image: url("data:image/svg+xml,%3Csvg width='15' height='15' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.22 15.53a.75.75 0 0 0 1.06 0L12 8.81l6.72 6.72a.75.75 0 1 0 1.06-1.06l-7.25-7.25a.75.75 0 0 0-1.06 0l-7.25 7.25a.75.75 0 0 0 0 1.06Z' fill='%23212121'/%3E%3C/svg%3E");
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        margin-top: 3px;
+        margin-left: 0px;
+        background-position: center top;
+        background-repeat: no-repeat;
+        opacity: 0;
+        transform: translateY(5px);
+        transition: 0.5s var(--controlbar--animation-easing);
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"][showArrow="1"]:hover:after {
+        opacity: 0.8;
+        transform: translateY(2px);
+    }
+
+    /*
+
+    section[uie-ref="controlbar-toolSelector"]:before {
+        content: "";
+        width: var(--controlbar-button-size);
+        height: var(--controlbar-button-size);
+        position: absolute;
+        z-index: -1;
+        background-color: var(--controlbar--background-color-hover);
+        transition: 0.5s var(--controlbar--animation-easing);
+        transform: translateX(calc(100% * var(--uie-prop-focused)));
+    }
+
+    section[uie-ref="controlbar-toolSelector"]:before {
+        content: "";
+        width: var(--controlbar-button-size);
+        height: var(--controlbar-button-size);
+        position: absolute;
+        z-index: -1;
+        background-color: var(--controlbar--background-color-hover);
+        transition: 0.5s var(--controlbar--animation-easing);
+        transform: translateX(calc(100% * var(--uie-prop-focused))) scale(0.85);
+        border-radius: 6px;
+        opacity: 0.5;
+    }
+
+    [uie-prop-focused="-1"] section[uie-ref="controlbar-toolSelector"]:before {
+        transform: translateX(calc(100% * var(--uie-prop-active))) scale(1);
+        border-radius: 0px;
+        opacity: 0.2;
+    }
+    */
+
+    button[uie-ref="controlbar-toolSelector-button"][isspacer="1"] {
+        pointer-events: none;
+        width: 10px;
+        animation: controlbar-spacer-in 0.5s var(--controlbar--animation-easing);
+    }
+
+    button[uie-ref="controlbar-toolSelector-button"][isspacer="1"]:after {
+        content: '';
+        width: 0.5px;
+        left: 4.75px;
+        opacity: 0.25;
+        height: calc(var(--controlbar-button-size) / 2);
+        position: absolute;
+        top: calc(var(--controlbar-button-size) / 4);
+        background-color: var(--controlbar--background-color-hover);
+    }
+</style>
+<aside class="uiElement uie-uiControlbar" uie-ref="controlbar-outer" uie-prop-barPosition="0" uie-prop-barState="1"
+    uie-prop-active="0" uie-prop-focused="-1">
+    <section uie-ref="controlbar-toolSelector">
+    </section>
+</aside>
+
+<template uie-template="controlbar-tool">
+    <button uie-ref="controlbar-toolSelector-button">
+        <div uie-ref="controlbar-toolSelector-toolicon"></div>
+    </button>
+</template>

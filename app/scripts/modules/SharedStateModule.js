@@ -179,6 +179,7 @@ class SharedStateModule {
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioConnectivity-NewUser', (userProfile) => {
                     //console.log('socket newUser', userProfile, window.sharedState.currentUsers);
                     window.sharedState.currentUsers.push(userProfile);
+                    window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
                 });
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioDocumentStateUpdateGet', () => {
                     window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
@@ -309,7 +310,6 @@ class SharedStateModule {
                             //console.log(documentState);
                             window.DocumentState.elements = JSON.parse(documentState).elements;
                             window.dispatchEvent(new Event('DocumentStateEvent-ReloadAllElements'));
-
                         });
                     })
                 });

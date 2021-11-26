@@ -52,6 +52,8 @@
     overflow: hidden;  
     height: 24px;
     width: 100%; 
+    word-break: break-all;
+    line-break: anywhere;
 }
 
 .uie-simplemenu-cont > div > p > span:first-child {

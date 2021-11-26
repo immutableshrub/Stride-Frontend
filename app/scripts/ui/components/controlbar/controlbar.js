@@ -2,6 +2,7 @@ import template from './template.html?raw'
 import uiColors from '../../theme/colors';
 import uiTheme from '../../theme/uiTheme';
 import intl from '../../../intl/intl';
+import SimpleMenu from '../simplemenu/simplemenu';
 
 function createCustomElement() {
     return customElements.define('uie-controlbar',
@@ -35,14 +36,20 @@ function createCustomElement() {
                     focusedState: 0,
                     barPosition: 0,
                     barState: 1,
-                    currentColor: '#212121'
+                    currentColor: '#212121',
+                    zoomState: 1,
                 }, {
                     set: function (target, key, value) {
                         target[key] = value;
                         shadowRootElementProxy.setAttribute('uie-prop-' + key, value)
                         shadowRootElementProxy.querySelector('section[uie-ref="controlbar-toolSelector"]').style.setProperty('--uie-prop-' + key, value)
+
+                        shadowRoot.children[0].querySelector('aside.uie-zoombar').setAttribute('uie-prop-' + key, value)
                         if (key == 'currentColor') {
                             shadowRootElementProxy.querySelector('section[uie-ref="controlbar-toolSelector"] button svg.currentColor path').setAttribute('fill', value)
+                        }
+                        if (key == 'zoomState') {
+                            shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomState"]').innerHTML = (100 * value).toString().split('.')[0] + '%';
                         }
                         if (key == 'active') {
                             shadowRootElementProxy.querySelectorAll('section[uie-ref="controlbar-toolSelector"] button').forEach(el => {
@@ -61,6 +68,79 @@ function createCustomElement() {
                 shadowRootElementProxy.addEventListener('focusout', (event) => {
                     this.state.focused = -1;
                 });
+                this.state.barPosition = window.SettingsStateModule['interface.dockPosition'] || 0;
+
+                shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomIn"]').addEventListener('click', (event) => {
+                    document.activeElement && document.activeElement.blur();
+                    event.stopPropagation();
+                    WindowState.canvas.document.position.zoomScale += ((-200 * 0.001) * -1);
+                    WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
+                    uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
+                    document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.5s cubic-bezier(.86, 0, .07, 1)';
+                    document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
+                    shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomState"]').innerHTML = (100 * WindowState.canvas.document.position.zoomScale).toString().split('.')[0] + '%';
+                    return false;
+                })
+                shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomOut"]').addEventListener('click', (event) => {
+                    document.activeElement && document.activeElement.blur();
+                    event.stopPropagation();
+                    WindowState.canvas.document.position.zoomScale += ((200 * 0.001) * -1);
+                    WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
+                    uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
+                    document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.5s cubic-bezier(.86, 0, .07, 1)';
+                    document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
+                    shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomState"]').innerHTML = (100 * WindowState.canvas.document.position.zoomScale).toString().split('.')[0] + '%';
+                    return false;
+                })
+                shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomState"]').addEventListener('click', (event) => {
+                    document.activeElement && document.activeElement.blur();
+                    event.stopPropagation();
+                    const zoomMenu = [
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/anchorRight',
+                            onSelected() {
+                                WindowState.canvas.document.position.zoomScale = 1;
+                                WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
+                                uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
+                                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.5s cubic-bezier(.86, 0, .07, 1)';
+                                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
+                                shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomState"]').innerHTML = (100 * WindowState.canvas.document.position.zoomScale).toString().split('.')[0] + '%';
+                            },
+                            name: intl.str('app.ui.zoom.resetZoom')
+                        },
+                        {
+                            type: 'seperator',
+                            icon: 'ui/zoomReset',
+                            onSelected() {
+                                window.SettingsStateModule['interface.dockPosition'] = 2;
+                                uiDocument.components.controlbar.barPosition = window.SettingsStateModule['interface.dockPosition'] || 0;
+                            },
+                            name: intl.str('app.ui.dockAlignment.right')
+                        },
+                    ]
+                    let zoomlevels = [50, 70, 90, 100, 125, 150, 175, 200, 300, 350, 400]
+                    zoomlevels.forEach((zoomlevel) => {
+                        zoomMenu.push({
+                            type: 'menuElement',
+                            icon: 'blank/blank',
+                            onSelected() {
+                                WindowState.canvas.document.position.zoomScale = (zoomlevel / 100);
+                                WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
+                                uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
+                                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.5s cubic-bezier(.86, 0, .07, 1)';
+                                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
+                                shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomState"]').innerHTML = (100 * WindowState.canvas.document.position.zoomScale).toString().split('.')[0] + '%';
+                            },
+                            name: zoomlevel + '%'
+                        })
+                    })
+                    new SimpleMenu(window.uiDocument, [event.clientX, event.clientY, 3], zoomMenu);
+                    return false;
+                })
+                shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomIn"]').addEventListener("contextmenu", (e) => { e.preventDefault(); return false; });
+                shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomState"]').addEventListener("contextmenu", (e) => { e.preventDefault(); return false; });
+                shadowRoot.children[0].querySelector('[uie-ref="controlbar-toolSelector-button"][uie-bind="zoomOut"]').addEventListener("contextmenu", (e) => { e.preventDefault(); return false; });
                 log.success('🧩 UI Element - controlbar', 'Created new uie-controlbar custom element.', uiColors.purple);
             }
 
@@ -131,7 +211,11 @@ function createCustomElement() {
                             event.stopPropagation();
                             this.state.active = itemIndex;
                             log.display(name + " is now ready.")
-                            onSelected(event);
+                            if (this.state.barPosition == 1) {
+                                onSelected(new PointerEvent("pointerdown", { clientX: event.clientX + 315, clientY: event.clientY }));
+                            } else {
+                                onSelected(event)
+                            }
                         }
                         return false;
                     });
@@ -161,12 +245,20 @@ function createCustomElement() {
 
                         if (element.getAttribute('isSelected') == 0) {
                             if (type == 'documentCommand' || type == 'systemCommand' || type == 'dropdownMenu') {
-                                onSelected(event);
+                                if (this.state.barPosition == 1) {
+                                    onSelected(new PointerEvent("pointerdown", { clientX: event.clientX + 315, clientY: event.clientY }));
+                                } else {
+                                    onSelected(event)
+                                }
                                 this.state.active = this.state.active;
                             } else {
                                 this.state.active = itemIndex;
                                 log.display(name + " is now ready.")
-                                onSelected(event);
+                                if (this.state.barPosition == 1) {
+                                    onSelected(new PointerEvent("pointerdown", { clientX: event.clientX + 315, clientY: event.clientY }));
+                                } else {
+                                    onSelected(event)
+                                }
                             }
                         }
                     });
@@ -184,6 +276,10 @@ function createCustomElement() {
             }
             set currentColor(val) {
                 this.state.currentColor = val;
+            }
+
+            set zoomScale(val) {
+                this.state.zoomState = val;
             }
 
             get selectedItem() {

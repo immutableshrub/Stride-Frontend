@@ -48,17 +48,6 @@ class WindowStateModule {
                     items: [
                         {
                             type: 'menuElement',
-                            icon: 'pens/eraseScreen',
-                            onSelected() {
-                                window.dispatchEvent(new CustomEvent('DocumentStateEvent-DocumentClearAll'));
-                            },
-                            name: intl.str('app.header.more.clearAllStrokes')
-                        },
-                        {
-                            type: 'seperator',
-                        },
-                        {
-                            type: 'menuElement',
                             icon: 'ui/cog',
                             onSelected() {
                                 window.dispatchEvent(new CustomEvent('SystemStateEvent-SettingsModule-SettingsDialog'))
@@ -260,7 +249,85 @@ class WindowStateModule {
                     name: intl.str('app.action.redo'),
                     keyboardShortcut: ['command+y', 'ctrl+y'],
                     repeats: true
-                }
+                },
+                {
+                    type: 'spacer'
+                },
+                {
+                    type: 'dropdownMenu',
+                    icon: 'ui/grid',
+                    name: intl.str('app.ui.dock.moreOptions'),
+                    pos: 4,
+                    showArrow: true,
+                    disableOpacity: true,
+                    items: [
+                        {
+                            type: 'menuElement',
+                            icon: 'pens/eraseScreen',
+                            onSelected() {
+                                window.dispatchEvent(new CustomEvent('DocumentStateEvent-DocumentClearAll'));
+                            },
+                            name: intl.str('app.header.more.clearAllStrokes')
+                        },
+                        {
+                            type: 'seperator',
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/zoomIn',
+                            onSelected() {
+                                WindowState.canvas.document.position.zoomScale += ((-200 * 0.001) * -1);
+                                WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
+                                uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
+                                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.5s cubic-bezier(.86, 0, .07, 1)';
+                                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
+                            },
+                            name: intl.str('app.ui.zoom.in')
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/zoomOut',
+                            onSelected() {
+                                WindowState.canvas.document.position.zoomScale += ((200 * 0.001) * -1);
+                                WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
+                                uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
+                                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.5s cubic-bezier(.86, 0, .07, 1)';
+                                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
+                            },
+                            name: intl.str('app.ui.zoom.out')
+                        },
+                        {
+                            type: 'seperator',
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/anchorBottom',
+                            onSelected() {
+                                window.SettingsStateModule['interface.dockPosition'] = 0;
+                                uiDocument.components.controlbar.barPosition = window.SettingsStateModule['interface.dockPosition'] || 0;
+                            },
+                            name: intl.str('app.ui.dockAlignment.bottom')
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/anchorLeft',
+                            onSelected() {
+                                window.SettingsStateModule['interface.dockPosition'] = 1;
+                                uiDocument.components.controlbar.barPosition = window.SettingsStateModule['interface.dockPosition'] || 0;
+                            },
+                            name: intl.str('app.ui.dockAlignment.left')
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/anchorRight',
+                            onSelected() {
+                                window.SettingsStateModule['interface.dockPosition'] = 2;
+                                uiDocument.components.controlbar.barPosition = window.SettingsStateModule['interface.dockPosition'] || 0;
+                            },
+                            name: intl.str('app.ui.dockAlignment.right')
+                        },
+                    ]
+                },
             ]
         },
         canvas: {

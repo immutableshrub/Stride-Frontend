@@ -19,7 +19,9 @@ const langs = {
             'app.header.more.settings': 'Settings',
             'app.header.more.about': 'About',
             'app.header.more.clearAllStrokes': 'Clear All Strokes',
+            'app.header.more.clearAllStrokesFailed': '<h1>You can\'t do that.</h1><p>You are not the owner of this document.</p>',
             'app.ui.closeAction': 'Close',
+            'app.ui.OKaction': 'OK',
             'app.ui.loadingAction': 'Loading...',
             'app.sharemodule.beginsharing': 'Share this document',
             'app.sharemodule.editProfile': 'Edit my profile',
@@ -39,7 +41,22 @@ const langs = {
             'app.tool.colorList.green': 'Green',
             'app.tool.colorList.lime': 'Lime',
             'app.tool.colorList.yellow': 'Yellow',
-            'app.tool.colorList.orange': 'Orange'
+            'app.tool.colorList.orange': 'Orange',
+            'app.ui.dock.moreOptions': 'More options',
+            'app.ui.dockAlignment.bottom': 'Align dock to bottom',
+            'app.ui.dockAlignment.left': 'Align dock to left',
+            'app.ui.dockAlignment.right': 'Align dock to right',
+            'app.ui.zoom.in': 'Zoom in',
+            'app.ui.zoom.out': 'Zoom out',
+            'app.ui.zoom.resetZoom': 'Reset Zoom',
+            'app.signalbars.cloudDisconnected': 'Not connected to cloud servers',
+            'app.signalbars.signalDisconnected': 'Disconnected',
+            'app.signalbars.cloudConnecting': 'Connecting to cloud servers...',
+            'app.signalbars.cloudConnected': 'Connected to cloud servers',
+            'app.signalbars.signalMSUnits': 'ms',
+            'app.signalbars.signalConnected': 'Latency: ',
+            'app.signalbars.signalLatencyWaiting': 'Waiting for latency measurements...',
+            'app.signalbars.signalLatencyError': 'Latency measurement timeout...'
         }
     }
 }

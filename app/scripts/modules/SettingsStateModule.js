@@ -56,6 +56,9 @@ class SettingsStateModule {
     }
 }
 
+function onSettingUpdate() {
+    window.uiDocument.components.controlbar.barPosition = window.SettingsStateModule['interface.dockPosition'] || 0;
+}
 function buildSettingsStateDialog(htmlElement) {
     let settingsStateForm = document.createElement('form');
     settingsSchema.settings.forEach((setting) => {
@@ -71,6 +74,7 @@ function buildSettingsStateDialog(htmlElement) {
                     window.SettingsStateModule[setting.id] = setting.default;
                     htmlElement.innerHTML = '';
                     buildSettingsStateDialog(htmlElement);
+                    onSettingUpdate();
                 });
             }
             formControl.appendChild(legend);
@@ -90,6 +94,7 @@ function buildSettingsStateDialog(htmlElement) {
                         window.SettingsStateModule[setting.id] = event.target.checked;
                         htmlElement.innerHTML = '';
                         buildSettingsStateDialog(htmlElement);
+                        onSettingUpdate();
                     });
                     break;
                 }
@@ -106,6 +111,7 @@ function buildSettingsStateDialog(htmlElement) {
                         window.SettingsStateModule[setting.id] = event.target.value;
                         htmlElement.innerHTML = '';
                         buildSettingsStateDialog(htmlElement);
+                        onSettingUpdate();
                     });
                     break;
                 }
@@ -139,6 +145,7 @@ function buildSettingsStateDialog(htmlElement) {
                         window.SettingsStateModule[setting.id] = event.target.value;
                         htmlElement.innerHTML = '';
                         buildSettingsStateDialog(htmlElement);
+                        onSettingUpdate();
                     });
                     break;
                 }

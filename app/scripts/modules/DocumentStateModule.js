@@ -1,5 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import uiColors from '../ui/theme/colors';
+import SimpleDialog from '../ui/components/simpledialog/simpledialog';
+import intl from '../intl/intl';
+import uiIcons from '../ui/theme/icons';
 
 class DocumentStateModule {
     redoStack = []
@@ -120,14 +123,30 @@ class DocumentStateModule {
             }
         }, false);
         window.addEventListener('DocumentStateEvent-DocumentClearAll', function (e) {
-            DocumentState.elements = [];
-            window.dispatchEvent(new CustomEvent('CanvasDisplayEvent-Clean'))
+            if (window.sharedState.sharedStatus == 2) {
+                new SimpleDialog(window.uiDocument, {
+                    title: intl.str('app.header.more.clearAllStrokes'),
+                    icon: uiIcons.pens.eraseScreen,
+                    canClose: true,
+                    largeDialog: false,
+                    body: intl.str('app.header.more.clearAllStrokesFailed'),
+                    buttons: [{
+                        type: 'primary',
+                        text: intl.str('app.ui.OKaction'),
+                        callback: (e) => { },
+                        close: true
+                    }],
+                });
+            } else {
+                DocumentState.elements = [];
+                window.dispatchEvent(new CustomEvent('CanvasDisplayEvent-Clean'))
 
-            window.dispatchEvent(new CustomEvent('SharedStateRelay-DSMG-ioComm', {
-                detail: {
-                    name: 'CanvasDisplayEvent-Clean',
-                }
-            }))
+                window.dispatchEvent(new CustomEvent('SharedStateRelay-DSMG-ioComm', {
+                    detail: {
+                        name: 'CanvasDisplayEvent-Clean',
+                    }
+                }))
+            }
         }, false);
         document.querySelector('title').innerText = this.documentState.name + ' - Stride';
         log.success("📦 Document State Manager", "Successfully initalised a new DocumentStateManager for document " + DocumentState.id, uiColors.pink)

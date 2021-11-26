@@ -14,6 +14,9 @@ class SharedStateModule {
     currentUsers = [];
     shareDialogLink = '';
     shareLink = '';
+    latencyMeasurements = [];
+    latency = 0;
+    timeout = false;
     constructor(url) {
         window.addEventListener('SystemStateEvent-CollaborationModule-ManagePeopleButton', (e) => {
             //console.log(e)
@@ -209,6 +212,90 @@ class SharedStateModule {
         });
         window.addEventListener('SystemStateEvent-CollaborationModule-ManageCloudButton', (e) => {
             console.log(e.detail)
+            if (this.sharedStatus == 0) {
+                new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], [{
+                    type: 'menuElement',
+                    icon: 'ui/circleDismiss',
+                    onSelected: () => { },
+                    name: intl.str('app.signalbars.cloudDisconnected')
+                },
+                {
+                    type: 'menuElement',
+                    icon: '_7th_Signal_Regiment/off',
+                    onSelected: () => { },
+                    name: intl.str('app.signalbars.signalDisconnected')
+                }]);
+            } else {
+                let menuEls = [];
+                if (window.sharedState.socketInstance.connected) {
+                    menuEls.push({
+                        type: 'menuElement',
+                        icon: 'ui/check',
+                        onSelected: () => { },
+                        name: intl.str('app.signalbars.cloudConnected')
+                    })
+                } else {
+                    menuEls.push({
+                        type: 'menuElement',
+                        icon: 'ui/circleDismiss',
+                        onSelected: () => { },
+                        name: intl.str('app.signalbars.cloudConnecting')
+                    })
+                }
+                if (window.sharedState.timeout == false) {
+                    if (window.sharedState.latency <= 2) {
+                        menuEls.push({
+                            type: 'menuElement',
+                            icon: '_7th_Signal_Regiment/error',
+                            onSelected: () => { },
+                            name: intl.str('app.signalbars.signalLatencyWaiting')
+                        })
+                    } else if (window.sharedState.latency < 200) {
+                        menuEls.push({
+                            type: 'menuElement',
+                            icon: '_7th_Signal_Regiment/signal_5',
+                            onSelected: () => { },
+                            name: intl.str('app.signalbars.signalConnected') + window.sharedState.latency + intl.str('app.signalbars.signalMSUnits')
+                        })
+                    } else if (window.sharedState.latency < 300) {
+                        menuEls.push({
+                            type: 'menuElement',
+                            icon: '_7th_Signal_Regiment/signal_4',
+                            onSelected: () => { },
+                            name: intl.str('app.signalbars.signalConnected') + window.sharedState.latency + intl.str('app.signalbars.signalMSUnits')
+                        })
+                    } else if (window.sharedState.latency < 400) {
+                        menuEls.push({
+                            type: 'menuElement',
+                            icon: '_7th_Signal_Regiment/signal_3',
+                            onSelected: () => { },
+                            name: intl.str('app.signalbars.signalConnected') + window.sharedState.latency + intl.str('app.signalbars.signalMSUnits')
+                        })
+                    } else if (window.sharedState.latency < 500) {
+                        menuEls.push({
+                            type: 'menuElement',
+                            icon: '_7th_Signal_Regiment/signal_2',
+                            onSelected: () => { },
+                            name: intl.str('app.signalbars.signalConnected') + window.sharedState.latency + intl.str('app.signalbars.signalMSUnits')
+                        })
+                    } else {
+                        menuEls.push({
+                            type: 'menuElement',
+                            icon: '_7th_Signal_Regiment/signal_1',
+                            onSelected: () => { },
+                            name: intl.str('app.signalbars.signalConnected') + window.sharedState.latency + intl.str('app.signalbars.signalMSUnits')
+                        })
+                    }
+                } else {
+                    menuEls.push({
+                        type: 'menuElement',
+                        icon: '_7th_Signal_Regiment/error',
+                        onSelected: () => { },
+                        name: intl.str('app.signalbars.signalLatencyError')
+                    })
+                }
+                new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], menuEls);
+            }
         });
         if (url) {
             //console.log(url.split('+'))
@@ -321,14 +408,27 @@ class SharedStateModule {
                 });
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioConnectivity-RemoveUser', (userProfile, intl) => {
                     //console.log('socket newUser', userProfile, window.sharedState.currentUsers);
-                    window.sharedState.currentUsers = intl.currentUsers;
                     if (userProfile.id !== window.ProfileState.userProfile.id) {
                         window.dispatchEvent(new CustomEvent('SharedStateRelay-UserListUpdate-RemoveUser', { detail: { userProfile: userProfile } }));
+                        window.sharedState.currentUsers = intl.currentUsers;
                     }
                 });
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioDocumentStateUpdateGet', () => {
                     window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
                 })
+
+                setInterval(() => {
+                    let time1 = performance.now();
+                    window.sharedState.socketInstance.volatile.emit('SharedStateRelay-DSMG-ioLatencyCheck', socketCBTimeout(() => {
+                        let totalTime = performance.now() - time1;
+                        window.sharedState.timeout = false;
+                        if (window.sharedState.latencyMeasurements.length >= 100) window.sharedState.latencyMeasurements.shift();
+                        window.sharedState.latencyMeasurements.push(totalTime);
+                        window.sharedState.latency = Math.round(((window.sharedState.latencyMeasurements.reduce((sum, i) => sum + i, 0) / window.sharedState.latencyMeasurements.length) + Number.EPSILON) * 100) / 100;
+                    }, () => {
+                        window.sharedState.timeout = true;
+                    }, 4500));
+                }, 5000);
                 callback(200);
             } catch (err) {
                 callback(0, err);
@@ -471,6 +571,21 @@ class SharedStateModule {
 
             }
         }, id[1]);
+    }
+}
+
+function socketCBTimeout(success, timeout, delay) {
+    let resolved = false;
+    const resolveTimer = setTimeout(() => {
+        if (resolved) return;
+        resolved = true;
+        timeout();
+    }, delay);
+    return (...args) => {
+        if (resolved) return;
+        resolved = true;
+        clearTimeout(resolveTimer);
+        success.apply(this, args);
     }
 }
 export default SharedStateModule;

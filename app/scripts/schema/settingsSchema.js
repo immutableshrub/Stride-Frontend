@@ -3,6 +3,24 @@ const settingsSchema = {
     settings: [
         {
             prop: 'header',
+            name: 'Interface'
+        },
+        {
+            prop: 'setting',
+            id: 'interface.dockPosition',
+            group: 'Interface',
+            name: 'Dock Position',
+            description: 'Choose the position of the control dock on the screen.',
+            type: 'enum',
+            options: [
+                { name: 'Bottom', value: '0', description: 'Position the dock on the bottom of the screen.' },
+                { name: 'Left', value: '1', description: 'Position the dock on the left-hand side of the screen.' },
+                { name: 'Right', value: '2', description: 'Position the dock on the right-hand side of the screen.' }
+            ],
+            default: '0'
+        },
+        {
+            prop: 'header',
             name: 'Interaction'
         },
         {

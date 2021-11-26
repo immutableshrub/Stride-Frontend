@@ -79,8 +79,9 @@ const InteractionModule = {
                 WindowState.canvas.document.position.zoomScale += ((e.deltaY * 0.001) * -1);
                 WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
                 uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
-                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.2s linear';
+                document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.2s cubic-bezier(0, 0.0, 0.07, 1)';
                 document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
+                uiDocument.components.controlbar.zoomScale = WindowState.canvas.document.position.zoomScale;
                 return false;
             });
         } else {
@@ -247,7 +248,7 @@ const InteractionModule = {
                             WindowState.canvas.document.position.current[0] -= ((e.position.movementX / window.devicePixelRatio) / WindowState.canvas.document.position.zoomScale);
                             WindowState.canvas.document.position.current[1] -= ((e.position.movementY / window.devicePixelRatio) / WindowState.canvas.document.position.zoomScale);
                             uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
-                            document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0s linear';
+                            document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0s cubic-bezier(0, 0.0, 0.07, 1)';
                             document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
                         }
                         break;
@@ -265,7 +266,7 @@ const InteractionModule = {
                     //WindowState.canvas.document.position.zoomScale += Math.min(WindowState.ihs.pointerPrevZoom[0] - WindowState.ihs.pointerPrevZoom[1], 10) * -0.005;
                     //WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
                     uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
-                    document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0s linear';
+                    document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0s cubic-bezier(0, 0.0, 0.07, 1)';
                     document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
                 }
             } else if (WindowState.ihs.pointerOrig !== e.id && WindowState.ihs.pointers.length == 2) {
@@ -281,7 +282,7 @@ const InteractionModule = {
                     //WindowState.canvas.document.position.zoomScale += Math.min(WindowState.ihs.pointerPrevZoom[0] - WindowState.ihs.pointerPrevZoom[1], 10) * -0.005;
                     //WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
                     uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
-                    document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0s linear';
+                    document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0s cubic-bezier(0, 0.0, 0.07, 1)';
                     document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transform = 'scale(' + WindowState.canvas.document.position.zoomScale + ')';
                 }
             }

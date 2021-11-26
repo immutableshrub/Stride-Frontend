@@ -13,6 +13,7 @@ class SharedStateModule {
     socketInstance = null;
     currentUsers = [];
     shareDialogLink = '';
+    shareLink: '';
     constructor(url) {
         window.addEventListener('SystemStateEvent-CollaborationModule-ManagePeopleButton', (e) => {
             //console.log(e)
@@ -68,6 +69,9 @@ class SharedStateModule {
                                 document.querySelector('[uie-ref="shareDialogReplace"]').innerHTML = this.shareDialogLink
                                 document.querySelector('main.uie-dialog .uie-simpledialog-button').innerText = intl.str('app.ui.closeAction');
                                 document.querySelector('main.uie-dialog .uie-simpledialog-button').disabled = false;
+                                document.querySelector('[uie-ref="shareDialogReplace"] code').addEventListener('click', () => {
+                                    navigator.clipboard.writeText(this.shareLink)
+                                });
                             },
                             name: intl.str('app.sharemodule.copyLink')
                         },
@@ -128,6 +132,9 @@ class SharedStateModule {
                                 document.querySelector('[uie-ref="shareDialogReplace"]').innerHTML = this.shareDialogLink
                                 document.querySelector('main.uie-dialog .uie-simpledialog-button').innerText = intl.str('app.ui.closeAction');
                                 document.querySelector('main.uie-dialog .uie-simpledialog-button').disabled = false;
+                                document.querySelector('[uie-ref="shareDialogReplace"] code').addEventListener('click', () => {
+                                    navigator.clipboard.writeText(window.prevURL)
+                                });
                             },
                             name: intl.str('app.sharemodule.copyLink')
                         },
@@ -323,10 +330,14 @@ class SharedStateModule {
                                     url.hash = window.btoa(window.DocumentState.id + '+' + window.SettingsStateModule["collaboration.server.defaultServerURL"]);
                                     //console.log(url.toString()); // ok
                                     this.sharedStatus = 1;
+                                    this.shareLink = url.toString();
                                     this.shareDialogLink = '<h1>' + intl.str('app.sharemodule.copyLinkTitle') + '</h1><code>' + url.toString() + '</code><p>' + intl.str('app.sharemodule.copyLinkBody') + '</p>';
                                     document.querySelector('[uie-ref="shareDialogReplace"]').innerHTML = this.shareDialogLink
                                     document.querySelector('main.uie-dialog .uie-simpledialog-button').innerText = intl.str('app.ui.closeAction');
                                     document.querySelector('main.uie-dialog .uie-simpledialog-button').disabled = false;
+                                    document.querySelector('[uie-ref="shareDialogReplace"] code').addEventListener('click', () => {
+                                        navigator.clipboard.writeText(url.toString())
+                                    });
                                     sharedHUI.destroy();
                                 });
                             })

@@ -247,6 +247,7 @@ user-select: all;
 overflow-x: hidden;
 display: block;
 background-color: #bebebe33;
-padding: 10px;
+padding: 10px;  
 border-radius: 6px;
+word-break: break-all;
 }

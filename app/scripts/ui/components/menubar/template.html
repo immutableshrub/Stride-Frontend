@@ -216,6 +216,10 @@
         display: none;
     }
 
+    section[uie-ref="menubar-personCont"] .person-circle.hidden {
+        animation: menubar-profile-out 0.5s var(--menubar--animation-easing);
+    }
+
     section[uie-ref="menubar-personCont"] .person-circle:nth-child(1),
     section[uie-ref="menubar-personCont"] .person-circle:nth-child(2),
     section[uie-ref="menubar-personCont"] .person-circle:nth-child(3),
@@ -242,6 +246,21 @@
             width: 40px;
             opacity: 1;
             margin-right: -15px;
+
+        }
+    }
+
+    @keyframes menubar-profile-out {
+        from {
+            width: 40px;
+            opacity: 1;
+            margin-right: -15px;
+        }
+
+        to {
+            width: 40px;
+            opacity: 0;
+            margin-right: -40px;
 
         }
     }

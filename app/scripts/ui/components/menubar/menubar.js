@@ -66,7 +66,14 @@ function createCustomElement() {
                     personCont.addEventListener('click', (event) => {
                         console.log(event.detail.userProfile)
                     });
-                    shadowRootElementProxy.querySelector('section[uie-ref="menubar-personCont').appendChild(personCont)
+                    shadowRootElementProxy.querySelector('section[uie-ref="menubar-personCont"]').appendChild(personCont)
+                })
+                window.addEventListener('SharedStateRelay-UserListUpdate-RemoveUser', (event) => {
+                    console.log('Remove', event);
+                    shadowRootElementProxy.querySelector('section[uie-ref="menubar-personCont"] .person-circle[data-id="' + event.detail.userProfile.id + '"]').classList.add('hidden');
+                    setTimeout(() => {
+                        shadowRootElementProxy.querySelector('section[uie-ref="menubar-personCont"] .person-circle[data-id="' + event.detail.userProfile.id + '"]').remove();
+                    }, 500);
                 })
                 log.success('🧩 UI Element - menubar', 'Created new uie-menubar custom element.', uiColors.purple);
             }

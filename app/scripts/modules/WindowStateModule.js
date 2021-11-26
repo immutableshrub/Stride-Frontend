@@ -26,7 +26,7 @@ class WindowStateModule {
                     type: 'systemCommand',
                     id: 'sys-managecollaboration',
                     icon: 'ui/people',
-                    event: 'SystemStateEvent-CollaborationModule-ManagePeopleButton',
+                    event: 'SystemStateEvent-CollaborationModule-ManageCloudButton',
                     name: intl.str('app.header.managePeople')
                 },
                 {
@@ -35,9 +35,9 @@ class WindowStateModule {
                 {
                     type: 'systemCommand',
                     id: 'sys-cloud',
-                    icon: 'ui/beaker',
-                    event: 'SystemStateEvent-BetaNotification',
-                    name: intl.str('app.notice.menubeta')
+                    icon: 'cloud/offline',
+                    event: 'SystemStateEvent-CollaborationModule-ManagePeopleButton',
+                    name: intl.str('app.notice.cloud')
                 },
                 {
                     type: 'dropdownMenu',

@@ -106,6 +106,24 @@ class SharedStateModule {
                             })
                         }
                     })
+                    menuArr.push({
+                        type: 'seperator',
+                    })
+                    if (window.sharedState.currentUsers.length > 1) {
+                        menuArr.push({
+                            type: 'menuElement',
+                            icon: 'blank/blank',
+                            onSelected: () => { },
+                            name: window.sharedState.currentUsers.length + ' people connected'
+                        })
+                    } else {
+                        menuArr.push({
+                            type: 'menuElement',
+                            icon: 'blank/blank',
+                            onSelected: () => { },
+                            name: window.sharedState.currentUsers.length + ' person connected (That\'s you!)'
+                        })
+                    }
                     new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], menuArr);
                     break;
                 }
@@ -166,10 +184,30 @@ class SharedStateModule {
                             })
                         }
                     })
+                    menuArr.push({
+                        type: 'seperator',
+                    })
+                    if (window.sharedState.currentUsers.length > 1) {
+                        menuArr.push({
+                            type: 'menuElement',
+                            icon: 'blank/blank',
+                            onSelected: () => { },
+                            name: window.sharedState.currentUsers.length + ' people connected'
+                        })
+                    } else {
+                        menuArr.push({
+                            type: 'menuElement',
+                            icon: 'blank/blank',
+                            onSelected: () => { },
+                            name: window.sharedState.currentUsers.length + ' person connected (That\'s you!)'
+                        })
+                    }
                     new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], menuArr);
                     break;
                 }
             }
+        });
+        window.addEventListener('SystemStateEvent-CollaborationModule-ManageCloudButton', (e) => {
         });
         if (url) {
             //console.log(url.split('+'))
@@ -225,6 +263,7 @@ class SharedStateModule {
             }, 25);
         },
         connectToSocket(addr, id, callback) {
+            window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.sync);
             try {
                 let urlstr = new URL(this.serverURL);
                 urlstr.pathname = '';
@@ -235,9 +274,33 @@ class SharedStateModule {
                         userprofile: JSON.stringify(window.ProfileState.userProfile)
                     }
                 });
-
                 window.sharedState.socketInstance.on("connect", () => {
-                    //console.log('socket connected')
+                    console.log('e')
+                    window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.success);
+                    window.sharedState.socketInstance.io.engine.once("upgrade", () => {
+                        window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.success);
+                    });
+                    window.sharedState.socketInstance.io.engine.on("packet", ({ type, data }) => {
+                        window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.download);
+                    });
+                    window.sharedState.socketInstance.io.engine.on("packetCreate", ({ type, data }) => {
+                        window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.upload);
+                    });
+                });
+                window.sharedState.socketInstance.io.on("error", (error) => {
+                    window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.fail);
+                });
+                window.sharedState.socketInstance.io.on("reconnect", (attempt) => {
+                    window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.success);
+                });
+                window.sharedState.socketInstance.io.on("reconnect_attempt", (attempt) => {
+                    window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.sync);
+                });
+                window.sharedState.socketInstance.io.on("reconnect_error", (error) => {
+                    window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.fail);
+                });
+                window.sharedState.socketInstance.io.on("ping", () => {
+                    window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.success);
                 });
                 window.sharedState.socketInstance.on("SharedStateRelay-DSMG-ioComm", (name, args) => {
                     //console.log('socket recieved can', name, args)
@@ -253,6 +316,13 @@ class SharedStateModule {
                     window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
                     if (userProfile.id !== window.ProfileState.userProfile.id) {
                         window.dispatchEvent(new CustomEvent('SharedStateRelay-UserListUpdate-New', { detail: { userProfile: userProfile } }));
+                    }
+                });
+                window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioConnectivity-RemoveUser', (userProfile, intl) => {
+                    //console.log('socket newUser', userProfile, window.sharedState.currentUsers);
+                    window.sharedState.currentUsers = intl.currentUsers;
+                    if (userProfile.id !== window.ProfileState.userProfile.id) {
+                        window.dispatchEvent(new CustomEvent('SharedStateRelay-UserListUpdate-RemoveUser', { detail: { userProfile: userProfile } }));
                     }
                 });
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioDocumentStateUpdateGet', () => {

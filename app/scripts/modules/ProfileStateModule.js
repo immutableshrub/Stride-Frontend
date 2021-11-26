@@ -23,6 +23,7 @@ class ProfileStateModule {
                     this.defuserProfile.name = lsDecoded.name || '';
                     this.defuserProfile.emoji = lsDecoded.emoji || '';
                     this.defuserProfile.color = lsDecoded.color || '';
+                    localStorage.setItem('userProfile', window.btoa(unescape(encodeURIComponent(JSON.stringify(this.defuserProfile)))));
                 }
             } else {
                 this.defuserProfile.id = uuidv4();

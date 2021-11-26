@@ -195,6 +195,7 @@
         display: flex;
         flex-flow: row;
         padding-right: 15px;
+        overflow: hidden;
     }
 
     section[uie-ref="menubar-personCont"] .person-circle {
@@ -203,7 +204,6 @@
         border-radius: 50%;
         background-color: #000000;
         font-size: 20px;
-        display: flex;
         line-height: 0px;
         align-items: center;
         justify-content: center;
@@ -213,6 +213,17 @@
         margin: 6px -15px 10px 0px;
         cursor: pointer;
         animation: menubar-profile-in 0.5s var(--menubar--animation-easing);
+        display: none;
+    }
+
+    section[uie-ref="menubar-personCont"] .person-circle:nth-child(1),
+    section[uie-ref="menubar-personCont"] .person-circle:nth-child(2),
+    section[uie-ref="menubar-personCont"] .person-circle:nth-child(3),
+    section[uie-ref="menubar-personCont"] .person-circle:nth-child(4),
+    section[uie-ref="menubar-personCont"] .person-circle:nth-child(5),
+    section[uie-ref="menubar-personCont"] .person-circle:nth-child(6),
+    section[uie-ref="menubar-personCont"] .person-circle:nth-child(7) {
+        display: flex;
     }
 
     section[uie-ref="menubar-personCont"] .person-circle:hover,
@@ -222,13 +233,16 @@
 
     @keyframes menubar-profile-in {
         from {
-            width: 0px;
-            margin-right: 0px;
+            width: 40px;
+            opacity: 0;
+            margin-right: -40px;
         }
 
         to {
             width: 40px;
+            opacity: 1;
             margin-right: -15px;
+
         }
     }
 </style>

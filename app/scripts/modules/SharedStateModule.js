@@ -13,7 +13,7 @@ class SharedStateModule {
     socketInstance = null;
     currentUsers = [];
     shareDialogLink = '';
-    shareLink: '';
+    shareLink = '';
     constructor(url) {
         window.addEventListener('SystemStateEvent-CollaborationModule-ManagePeopleButton', (e) => {
             //console.log(e)

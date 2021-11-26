@@ -208,6 +208,7 @@ class SharedStateModule {
             }
         });
         window.addEventListener('SystemStateEvent-CollaborationModule-ManageCloudButton', (e) => {
+            console.log(e.detail)
         });
         if (url) {
             //console.log(url.split('+'))

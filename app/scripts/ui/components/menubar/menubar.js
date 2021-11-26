@@ -63,7 +63,6 @@ function createCustomElement() {
                     personCont.setAttribute('data-id', event.detail.userProfile.id);
                     personCont.innerHTML = event.detail.userProfile.emoji;
                     personCont.style.backgroundColor = event.detail.userProfile.color;
-                    personCont.style.borderColor = event.detail.userProfile.color;
                     personCont.addEventListener('click', (event) => {
                         console.log(event.detail.userProfile)
                     });

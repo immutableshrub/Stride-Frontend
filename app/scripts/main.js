@@ -51,6 +51,7 @@ function init() {
     }
     if (new URL(window.location.href).hash.split('#')[1] !== undefined) {
         try {
+            window.prevURL = window.location.href;
             const hash = (window.atob(new URL(window.location.href).hash.split('#')[1]))
             window.location.hash = '';
             new WindowStateModule();

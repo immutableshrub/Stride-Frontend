@@ -14,12 +14,16 @@ class ProfileStateModule {
     constructor() {
         if (storageAvailable('localStorage')) {
             let lsTest = localStorage.getItem('userProfile');
+            let lsDecoded = {};
             if (lsTest !== null) {
-                let lsDecoded = JSON.parse(decodeURIComponent(escape(window.atob(lsTest))));
-                this.defuserProfile.id = lsDecoded.id || uuidv4();
-                this.defuserProfile.name = lsDecoded.name || '';
-                this.defuserProfile.emoji = lsDecoded.emoji || '';
-                this.defuserProfile.color = lsDecoded.color || '';
+                try {
+                    lsDecoded = JSON.parse(decodeURIComponent(escape(window.atob(lsTest))));
+                } catch { } finally {
+                    this.defuserProfile.id = lsDecoded.id || uuidv4();
+                    this.defuserProfile.name = lsDecoded.name || '';
+                    this.defuserProfile.emoji = lsDecoded.emoji || '';
+                    this.defuserProfile.color = lsDecoded.color || '';
+                }
             } else {
                 this.defuserProfile.id = uuidv4();
                 localStorage.setItem('userProfile', window.btoa(unescape(encodeURIComponent(JSON.stringify(this.defuserProfile)))));

@@ -12,6 +12,7 @@ class SharedStateModule {
     serverURL = ''
     socketInstance = null;
     currentUsers = [];
+    shareDialogLink = '';
     constructor(url) {
         window.addEventListener('SystemStateEvent-CollaborationModule-ManagePeopleButton', (e) => {
             //console.log(e)
@@ -49,27 +50,57 @@ class SharedStateModule {
                         },
                         {
                             type: 'menuElement',
-                            icon: 'ui/person',
+                            icon: 'ui/link',
                             onSelected: () => {
-                                this.#editProfile();
+                                let dialog = new SimpleDialog(window.uiDocument, {
+                                    title: intl.str('app.sharemodule.beginsharing'),
+                                    icon: uiIcons.ui.sharescreen,
+                                    canClose: false,
+                                    largeDialog: false,
+                                    body: '<div class="shareDialogReplace" uie-ref="shareDialogReplace"></div>',
+                                    buttons: [{
+                                        type: 'primary',
+                                        text: intl.str('app.ui.loadingAction'),
+                                        callback: (e) => { },
+                                        close: true
+                                    }],
+                                });
+                                document.querySelector('[uie-ref="shareDialogReplace"]').innerHTML = this.shareDialogLink
+                                document.querySelector('main.uie-dialog .uie-simpledialog-button').innerText = intl.str('app.ui.closeAction');
+                                document.querySelector('main.uie-dialog .uie-simpledialog-button').disabled = false;
                             },
-                            name: intl.str('app.sharemodule.editProfile')
+                            name: intl.str('app.sharemodule.copyLink')
                         },
                         {
                             type: 'seperator',
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/editSettings',
+                            onSelected: () => {
+                                this.#editProfile();
+                            },
+                            name: window.ProfileState.userProfile.name,
+                            hoverName: intl.str('app.sharemodule.editProfile')
                         }
                     ];
+                    if (window.sharedState.currentUsers.length > 1) {
+                        menuArr.push(
+                            {
+                                type: 'seperator',
+                            })
+                    }
                     window.sharedState.currentUsers.forEach(user => {
-                        //if (user.id !== window.ProfileState.userProfile.id) {
-                        menuArr.push({
-                            type: 'menuElement',
-                            icon: 'ui/person',
-                            onSelected: () => {
-                                console.log(user)
-                            },
-                            name: user.name
-                        })
-                        //}
+                        if (user.id !== window.ProfileState.userProfile.id) {
+                            menuArr.push({
+                                type: 'menuElement',
+                                icon: 'ui/person',
+                                onSelected: () => {
+                                    console.log(user)
+                                },
+                                name: user.name
+                            })
+                        }
                     })
                     new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], menuArr);
                     break;
@@ -78,22 +109,55 @@ class SharedStateModule {
                     let menuArr = [
                         {
                             type: 'menuElement',
-                            icon: 'ui/person',
+                            icon: 'ui/link',
+                            onSelected: () => {
+                                let dialog = new SimpleDialog(window.uiDocument, {
+                                    title: intl.str('app.sharemodule.beginsharing'),
+                                    icon: uiIcons.ui.sharescreen,
+                                    canClose: false,
+                                    largeDialog: false,
+                                    body: '<div class="shareDialogReplace" uie-ref="shareDialogReplace"></div>',
+                                    buttons: [{
+                                        type: 'primary',
+                                        text: intl.str('app.ui.loadingAction'),
+                                        callback: (e) => { },
+                                        close: true
+                                    }],
+                                });
+                                this.shareDialogLink = '<h1>' + intl.str('app.sharemodule.copyLinkTitle') + '</h1><code>' + window.prevURL || '' + '</code><p>' + intl.str('app.sharemodule.copyLinkBody') + '</p>';
+                                document.querySelector('[uie-ref="shareDialogReplace"]').innerHTML = this.shareDialogLink
+                                document.querySelector('main.uie-dialog .uie-simpledialog-button').innerText = intl.str('app.ui.closeAction');
+                                document.querySelector('main.uie-dialog .uie-simpledialog-button').disabled = false;
+                            },
+                            name: intl.str('app.sharemodule.copyLink')
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/editSettings',
                             onSelected: () => {
                                 this.#editProfile();
                             },
-                            name: intl.str('app.sharemodule.editProfile')
+                            name: window.ProfileState.userProfile.name,
+                            hoverName: intl.str('app.sharemodule.editProfile')
                         }
                     ];
+                    if (window.sharedState.currentUsers.length > 1) {
+                        menuArr.push(
+                            {
+                                type: 'seperator',
+                            })
+                    }
                     window.sharedState.currentUsers.forEach(user => {
-                        menuArr.push({
-                            type: 'menuElement',
-                            icon: 'ui/person',
-                            onSelected: () => {
-                                console.log(user)
-                            },
-                            name: user.name
-                        })
+                        if (user.id !== window.ProfileState.userProfile.id) {
+                            menuArr.push({
+                                type: 'menuElement',
+                                icon: 'ui/person',
+                                onSelected: () => {
+                                    console.log(user)
+                                },
+                                name: user.name
+                            })
+                        }
                     })
                     new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], menuArr);
                     break;
@@ -180,6 +244,9 @@ class SharedStateModule {
                     //console.log('socket newUser', userProfile, window.sharedState.currentUsers);
                     window.sharedState.currentUsers.push(userProfile);
                     window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
+                    if (userProfile.id !== window.ProfileState.userProfile.id) {
+                        window.dispatchEvent(new CustomEvent('SharedStateRelay-UserListUpdate-New', { detail: { userProfile: userProfile } }));
+                    }
                 });
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioDocumentStateUpdateGet', () => {
                     window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
@@ -222,7 +289,7 @@ class SharedStateModule {
             body: '<div class="shareDialogReplace" uie-ref="shareDialogReplace"></div>',
             buttons: [{
                 type: 'primary',
-                text: 'Loading...',
+                text: intl.str('app.ui.loadingAction'),
                 callback: (e) => { },
                 close: true
             }],
@@ -256,8 +323,9 @@ class SharedStateModule {
                                     url.hash = window.btoa(window.DocumentState.id + '+' + window.SettingsStateModule["collaboration.server.defaultServerURL"]);
                                     //console.log(url.toString()); // ok
                                     this.sharedStatus = 1;
-                                    document.querySelector('[uie-ref="shareDialogReplace"]').innerHTML = '<h1>Here\'s your link: </h1><code>' + url.toString() + '</code><p>Click to copy the link. <br/>Use the link to join this document. This link will expire when you close the document.</p>';
-                                    document.querySelector('main.uie-dialog .uie-simpledialog-button').innerText = 'Close';
+                                    this.shareDialogLink = '<h1>' + intl.str('app.sharemodule.copyLinkTitle') + '</h1><code>' + url.toString() + '</code><p>' + intl.str('app.sharemodule.copyLinkBody') + '</p>';
+                                    document.querySelector('[uie-ref="shareDialogReplace"]').innerHTML = this.shareDialogLink
+                                    document.querySelector('main.uie-dialog .uie-simpledialog-button').innerText = intl.str('app.ui.closeAction');
                                     document.querySelector('main.uie-dialog .uie-simpledialog-button').disabled = false;
                                     sharedHUI.destroy();
                                 });
@@ -302,6 +370,11 @@ class SharedStateModule {
                             }
                             */
                             this.currentUsers = intl.currentUsers;
+                            this.currentUsers.forEach(user => {
+                                if (user.id !== window.ProfileState.userProfile.id) {
+                                    window.dispatchEvent(new CustomEvent('SharedStateRelay-UserListUpdate-New', { detail: { userProfile: user } }));
+                                }
+                            });
                             //console.log(this.currentUsers)
                             this.sharedStatus = 2
                             sharedHUI.destroy();

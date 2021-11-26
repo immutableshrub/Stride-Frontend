@@ -76,7 +76,7 @@ const InteractionModule = {
             });
             ccx.addEventListener('wheel', (e) => {
                 e.preventDefault()
-                WindowState.canvas.document.position.zoomScale += e.deltaY * 0.001;
+                WindowState.canvas.document.position.zoomScale += ((e.deltaY * 0.001) * -1);
                 WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
                 uiDocument.components.canvas.ccx.scrollTo(WindowState.canvas.document.position.current[0], WindowState.canvas.document.position.current[1]);
                 document.querySelector('div[uie-ref="CanvasMountContainer"]').style.transition = '0.2s linear';

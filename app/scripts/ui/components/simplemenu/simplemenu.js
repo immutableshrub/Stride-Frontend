@@ -18,7 +18,7 @@ class SimpleMenu {
                     let menuItem = menuCont.appendChild(document.createElement('div'));
                     menuItem.insertAdjacentHTML('afterbegin', uiIcons[item.icon.split('/')[0]][item.icon.split('/')[1]].replace('#212121', item.iconColor || '#212121'));
                     let menuItemText = menuItem.appendChild(document.createElement('p'));
-                    menuItemText.innerText = item.name;
+                    menuItemText.innerHTML = '<span>' + item.name + '</span><span>' + (item.hoverName || item.name) + '</span>';
                     menuItem.addEventListener('click', item.onSelected);
                     menuCont.appendChild(menuItem);
                     break;

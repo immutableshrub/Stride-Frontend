@@ -190,6 +190,33 @@
         top: calc(var(--menubar-button-size) / 4);
         background-color: var(--menubar--background-color-hover);
     }
+
+    section[uie-ref="menubar-personCont"] {
+        display: flex;
+        flex-flow: row;
+        padding-right: 15px;
+    }
+
+    section[uie-ref="menubar-personCont"] .person-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #000000;
+        font-size: 20px;
+        display: flex;
+        line-height: 0px;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid;
+        margin: 6px -15px 10px 0px;
+    }
+
+    section[uie-ref="menubar-personCont"] .person-circle:hover,
+    section[uie-ref="menubar-personCont"] .person-circle:focus {
+        border: 2px solid #bebebe;
+    }
 </style>
 <aside class="uiElement uie-uiMenubar" uie-ref="menubar-outer" uie-prop-barState="1" uie-prop-active="0"
     uie-prop-focused="-1">
@@ -199,6 +226,7 @@
             <p uie-ref="menubar-documentName" contenteditable="true"></p>
         </div>
     </section>
+    <section uie-ref="menubar-personCont"></section>
     <section uie-ref="menubar-toolSelector">
     </section>
 </aside>

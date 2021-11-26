@@ -55,6 +55,20 @@ function createCustomElement() {
                 shadowRootElementProxy.addEventListener('focusout', (event) => {
                     this.state.focused = -1;
                 });
+
+                window.addEventListener('SharedStateRelay-UserListUpdate-New', (event) => {
+                    console.log(event);
+                    const personCont = document.createElement('div');
+                    personCont.classList.add('person-circle');
+                    personCont.setAttribute('data-id', event.detail.userProfile.id);
+                    personCont.innerHTML = event.detail.userProfile.emoji;
+                    personCont.style.backgroundColor = event.detail.userProfile.color;
+                    personCont.style.borderColor = event.detail.userProfile.color;
+                    personCont.addEventListener('click', (event) => {
+                        console.log(event.detail.userProfile)
+                    });
+                    shadowRootElementProxy.querySelector('section[uie-ref="menubar-personCont').appendChild(personCont)
+                })
                 log.success('🧩 UI Element - menubar', 'Created new uie-menubar custom element.', uiColors.purple);
             }
 

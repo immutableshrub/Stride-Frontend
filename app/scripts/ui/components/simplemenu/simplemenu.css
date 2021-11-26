@@ -51,6 +51,19 @@
     margin: 2px 0px 0px 0px;
 }
 
+.uie-simplemenu-cont > div > p > span:first-child {
+    display: block;
+}
+.uie-simplemenu-cont > div > p > span:last-child {
+    display: none;
+}
+.uie-simplemenu-cont > div:hover > p > span:first-child, .uie-simplemenu-cont > div:focus > p > span:first-child {
+    display: none;
+}
+.uie-simplemenu-cont > div:hover > p > span:last-child, .uie-simplemenu-cont > div:focus > p > span:last-child {
+    display: block;
+}
+
 
 .uie-simplemenu-cont hr {
 height: 0.5px;

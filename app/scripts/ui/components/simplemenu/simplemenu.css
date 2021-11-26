@@ -14,10 +14,8 @@
     border: 1px solid #EEEEEE;
     background-color: #ffffff;
     width: 300px;
-    /*
-    max-height: min(500px, calc(100vh - 50px));
+    max-height: min(700px, calc(100vh - 75px));
     overflow-y: auto;
-    */
 }
 
 .uie-simplemenu-cont[pos="1"] {

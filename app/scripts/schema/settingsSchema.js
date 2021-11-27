@@ -200,6 +200,15 @@ const settingsSchema = {
         },
         {
             prop: 'setting',
+            id: 'flags.acceptDSUpdatesWhenJoined',
+            group: 'Advanced',
+            name: 'Accepts DocumentState updates when joined.',
+            description: 'Controls if the SharedStateModule will process DocumentState updates when joined.',
+            type: 'boolean',
+            default: false
+        },
+        {
+            prop: 'setting',
             id: 'flags.InteractionModuleDebugMode',
             group: 'Advanced',
             name: 'InteractionModule Debug Verbosity',

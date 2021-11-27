@@ -417,6 +417,14 @@ class SharedStateModule {
                     window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
                 })
 
+                window.sharedState.socketInstance.on("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
+                    //console.log(documentState);
+                    if (window.SettingsStateModule['flags.acceptDSUpdatesWhenJoined'] == true) {
+                        window.DocumentState.elements = JSON.parse(documentState).elements;
+                        window.dispatchEvent(new Event('DocumentStateEvent-ReloadAllElements'));
+                    }
+                });
+
                 setInterval(() => {
                     let time1 = performance.now();
                     window.sharedState.socketInstance.volatile.emit('SharedStateRelay-DSMG-ioLatencyCheck', socketCBTimeout(() => {
@@ -543,6 +551,11 @@ class SharedStateModule {
                     window.ProfileState.updateUserProfile(document.querySelector('section.joinProfile section.userprofile-header>input').value, document.querySelector('section.joinProfile section.userprofile-header>.emojicont').innerText, document.querySelector('section.joinProfile section.userprofile-header>.emojicont').style.backgroundColor);
                     this.#socketTools.connectToSocket(status.data.socketAddr, id[0], () => {
                         //console.log(this.socketInstance)
+                        this.socketInstance.once("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
+                            //console.log(documentState);
+                            window.DocumentState.elements = JSON.parse(documentState).elements;
+                            window.dispatchEvent(new Event('DocumentStateEvent-ReloadAllElements'));
+                        });
                         this.socketInstance.emit("SharedStateRelay-DSMG-ioConnectivityCheck", (intl) => {
                             /*intl = {
                                 currentUsers: [{
@@ -560,11 +573,6 @@ class SharedStateModule {
                             //console.log(this.currentUsers)
                             this.sharedStatus = 2
                             sharedHUI.destroy();
-                        });
-                        this.socketInstance.once("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
-                            //console.log(documentState);
-                            window.DocumentState.elements = JSON.parse(documentState).elements;
-                            window.dispatchEvent(new Event('DocumentStateEvent-ReloadAllElements'));
                         });
                     })
                 });

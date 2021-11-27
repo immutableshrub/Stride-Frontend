@@ -117,7 +117,7 @@ class SharedStateModule {
                             type: 'menuElement',
                             icon: 'blank/blank',
                             onSelected: () => { },
-                            name: window.sharedState.currentUsers.length + ' people connected'
+                            name: (window.sharedState.currentUsers.length - 1) + ' people connected'
                         })
                     } else {
                         menuArr.push({
@@ -195,14 +195,14 @@ class SharedStateModule {
                             type: 'menuElement',
                             icon: 'blank/blank',
                             onSelected: () => { },
-                            name: window.sharedState.currentUsers.length + ' people connected'
+                            name: (window.sharedState.currentUsers.length - 1) + ' people connected'
                         })
                     } else {
                         menuArr.push({
                             type: 'menuElement',
                             icon: 'blank/blank',
                             onSelected: () => { },
-                            name: window.sharedState.currentUsers.length + ' person connected (That\'s you!)'
+                            name: (window.sharedState.currentUsers.length - 1) + ' people connected (Feeling lonely yet?)'
                         })
                     }
                     new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], menuArr);

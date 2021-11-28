@@ -401,7 +401,7 @@ class SharedStateModule {
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioConnectivity-NewUser', (userProfile) => {
                     //console.log('socket newUser', userProfile, window.sharedState.currentUsers);
                     window.sharedState.currentUsers.push(userProfile);
-                    window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
+                    window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', window.OTDocument_Export());
                     if (userProfile.id !== window.ProfileState.userProfile.id) {
                         window.dispatchEvent(new CustomEvent('SharedStateRelay-UserListUpdate-New', { detail: { userProfile: userProfile } }));
                     }
@@ -414,14 +414,13 @@ class SharedStateModule {
                     }
                 });
                 window.sharedState.socketInstance.on('SharedStateRelay-DSMG-ioDocumentStateUpdateGet', () => {
-                    window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', JSON.stringify(window.DocumentState));
+                    window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', window.OTDocument_Export());
                 })
 
                 window.sharedState.socketInstance.on("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
-                    //console.log(documentState);
+                    console.log(documentState);
                     if (window.SettingsStateModule['flags.acceptDSUpdatesWhenJoined'] == true) {
-                        window.DocumentState.elements = JSON.parse(documentState).elements;
-                        window.dispatchEvent(new Event('DocumentStateEvent-ReloadAllElements'));
+                        window.OTDocument_Import(documentState);
                     }
                 });
 
@@ -552,9 +551,8 @@ class SharedStateModule {
                     this.#socketTools.connectToSocket(status.data.socketAddr, id[0], () => {
                         //console.log(this.socketInstance)
                         this.socketInstance.once("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
-                            //console.log(documentState);
-                            window.DocumentState.elements = JSON.parse(documentState).elements;
-                            window.dispatchEvent(new Event('DocumentStateEvent-ReloadAllElements'));
+                            console.log(documentState);
+                            window.OTDocument_Import(documentState);
                         });
                         this.socketInstance.emit("SharedStateRelay-DSMG-ioConnectivityCheck", (intl) => {
                             /*intl = {

@@ -140,7 +140,7 @@ class DocumentStateModule {
                 return opPatch;
             },
             pca(pkt) {
-                console.log('ess')
+                ////console.log('ess')
                 let decoded = pkt.split(',')
                 let pach = window.atob(decoded[1])
                 if (decoded[0] == this.utils.hash(pach)) {
@@ -153,13 +153,13 @@ class DocumentStateModule {
                         return true;
                     }
                 } else {
-                    console.log('es')
+                    //console.log('es')
                 }
             },
             generate() {
                 let doc = new Map();
                 let fltOps = this.caretaker.flatten();
-                console.log(fltOps);
+                //console.log(fltOps);
                 fltOps.forEach(op => {
                     switch (op.op) {
                         case 'insert':
@@ -271,7 +271,7 @@ class DocumentStateModule {
         });
 
         window.addEventListener('DocumentStateModule-DSMG-ioComm', function (e) {
-            console.log(e)
+            //console.log(e)
             opsFunctions.pca(e.detail)
         }, false);
 
@@ -296,12 +296,12 @@ class DocumentStateModule {
         window.addEventListener('DocumentStateEvent-DocumentClearAll', function (e) {
         }, false);
 
-        console.log(this)
+        //console.log(this)
         //window.OTDocument_Export = opsFunctions.export.bind(this);
         //window.OTDocument_Import = opsFunctions.import.bind(this);
 
         window.OTDocument_Export = () => {
-            console.log(ops)
+            //console.log(ops)
             let exp = JSON.stringify({
                 ts: Date.now(),
                 content: ops
@@ -311,7 +311,7 @@ class DocumentStateModule {
         };
         window.OTDocument_Import = (ple) => {
             let pkt = ple.split(',')
-            console.log(ple, pkt)
+            //console.log(ple, pkt)
             let opst = window.atob(pkt[1]);
             if (pkt[0] == opsFunctions.utils.hash(opst)) {
                 ops = JSON.parse(opst).content;

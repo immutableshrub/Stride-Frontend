@@ -138,7 +138,7 @@ class OTDocument {
     generate() {
         let doc = new Map();
         let fltOps = this.flatten();
-        console.log(fltOps);
+        //console.log(fltOps);
         fltOps.forEach(op => {
             switch (op.op) {
                 case 'insert':

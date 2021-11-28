@@ -107,7 +107,7 @@ function registerMenuBarItems() {
         } else { uiDocument.components.menubar.addItem(tool.id || 'tool' + index, tool.name, uiIcons[tool.icon.split('/')[0]][tool.icon.split('/')[1]], tool.type, toolAction, (tool.active || false)) }
     });
     Mousetrap.bind('up up down down left right left right b a enter', function () {
-        console.log('mmm')
+        //console.log('mmm')
     });
 }
 function loader(num, text) {

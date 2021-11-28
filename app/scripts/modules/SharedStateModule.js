@@ -48,7 +48,7 @@ class SharedStateModule {
                             type: 'menuElement',
                             icon: 'ui/sharescreen',
                             onSelected: () => {
-                                console.log('end')
+                                //console.log('end')
                             },
                             name: intl.str('app.sharemodule.endsharing')
                         },
@@ -103,7 +103,7 @@ class SharedStateModule {
                                 type: 'menuElement',
                                 icon: 'ui/person',
                                 onSelected: () => {
-                                    console.log(user)
+                                    //console.log(user)
                                 },
                                 name: user.name
                             })
@@ -181,7 +181,7 @@ class SharedStateModule {
                                 type: 'menuElement',
                                 icon: 'ui/person',
                                 onSelected: () => {
-                                    console.log(user)
+                                    //console.log(user)
                                 },
                                 name: user.name
                             })
@@ -211,7 +211,7 @@ class SharedStateModule {
             }
         });
         window.addEventListener('SystemStateEvent-CollaborationModule-ManageCloudButton', (e) => {
-            console.log(e.detail)
+            //console.log(e.detail)
             if (this.sharedStatus == 0) {
                 new SimpleMenu(window.uiDocument, [e.detail.clientX, e.detail.clientY, 2], [{
                     type: 'menuElement',
@@ -363,7 +363,7 @@ class SharedStateModule {
                     }
                 });
                 window.sharedState.socketInstance.on("connect", () => {
-                    console.log('e')
+                    //console.log('e')
                     window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.success);
                     window.sharedState.socketInstance.io.engine.once("upgrade", () => {
                         window.uiDocument.components.menubar.updateItem('sys-cloud', uiIcons.cloud.success);
@@ -418,7 +418,7 @@ class SharedStateModule {
                 })
 
                 window.sharedState.socketInstance.on("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
-                    console.log(documentState);
+                    //console.log(documentState);
                     if (window.SettingsStateModule['flags.acceptDSUpdatesWhenJoined'] == true) {
                         window.OTDocument_Import(documentState);
                     }
@@ -551,7 +551,7 @@ class SharedStateModule {
                     this.#socketTools.connectToSocket(status.data.socketAddr, id[0], () => {
                         //console.log(this.socketInstance)
                         this.socketInstance.once("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
-                            console.log(documentState);
+                            //console.log(documentState);
                             window.OTDocument_Import(documentState);
                         });
                         this.socketInstance.emit("SharedStateRelay-DSMG-ioConnectivityCheck", (intl) => {

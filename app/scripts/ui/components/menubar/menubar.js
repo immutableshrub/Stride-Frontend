@@ -57,19 +57,19 @@ function createCustomElement() {
                 });
 
                 window.addEventListener('SharedStateRelay-UserListUpdate-New', (event) => {
-                    console.log(event);
+                    //console.log(event);
                     const personCont = document.createElement('div');
                     personCont.classList.add('person-circle');
                     personCont.setAttribute('data-id', event.detail.userProfile.id);
                     personCont.innerHTML = event.detail.userProfile.emoji;
                     personCont.style.backgroundColor = event.detail.userProfile.color;
                     personCont.addEventListener('click', (event) => {
-                        console.log(event.detail.userProfile)
+                        //console.log(event.detail.userProfile)
                     });
                     shadowRootElementProxy.querySelector('section[uie-ref="menubar-personCont"]').appendChild(personCont)
                 })
                 window.addEventListener('SharedStateRelay-UserListUpdate-RemoveUser', (event) => {
-                    console.log('Remove', event);
+                    //console.log('Remove', event);
                     shadowRootElementProxy.querySelector('section[uie-ref="menubar-personCont"] .person-circle[data-id="' + event.detail.userProfile.id + '"]').classList.add('hidden');
                     setTimeout(() => {
                         shadowRootElementProxy.querySelector('section[uie-ref="menubar-personCont"] .person-circle[data-id="' + event.detail.userProfile.id + '"]').remove();

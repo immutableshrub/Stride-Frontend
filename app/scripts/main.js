@@ -38,10 +38,10 @@ function init() {
     function kick() {
         const docState = '' | cat
         new WindowStateModule();
+        window.ProfileState = new ProfileStateModule();
         new DocumentStateModule(docState);
         new uieMenubar(uiDocument);
         new uieControlbar(uiDocument);
-        window.ProfileState = new ProfileStateModule();
         window.sharedState = new SharedStateModule;
         registerMenuBarItems()
         uiDocument.components.menubar.name = DocumentState.name;
@@ -55,10 +55,10 @@ function init() {
             const hash = (window.atob(new URL(window.location.href).hash.split('#')[1]))
             window.location.hash = '';
             new WindowStateModule();
+            window.ProfileState = new ProfileStateModule();
             new DocumentStateModule();
             new uieMenubar(uiDocument);
             new uieControlbar(uiDocument);
-            window.ProfileState = new ProfileStateModule();
             window.sharedState = new SharedStateModule(hash);
             registerMenuBarItems()
             uiDocument.components.menubar.name = DocumentState.name;
@@ -107,7 +107,7 @@ function registerMenuBarItems() {
         } else { uiDocument.components.menubar.addItem(tool.id || 'tool' + index, tool.name, uiIcons[tool.icon.split('/')[0]][tool.icon.split('/')[1]], tool.type, toolAction, (tool.active || false)) }
     });
     Mousetrap.bind('up up down down left right left right b a enter', function () {
-        console.log('mmm')
+        //console.log('mmm')
     });
 }
 function loader(num, text) {

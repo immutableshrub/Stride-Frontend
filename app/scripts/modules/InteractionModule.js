@@ -67,7 +67,7 @@ const InteractionModule = {
             });
             ccx.addEventListener('pointercancel', (e) => {
                 e.preventDefault()
-                console.log('Pointer moved out', e);
+                //console.log('Pointer moved out', e);
                 return false;
             });
             ccx.addEventListener('contextmenu', (e) => {
@@ -121,11 +121,11 @@ const InteractionModule = {
                 raw: e
             };
             if (window.SettingsStateModule['flags.InteractionModuleDebugMode'] == 'LogEventsToConsole') {
-                console.log(newE)
+                //console.log(newE)
             } else if (window.SettingsStateModule['flags.InteractionModuleDebugMode'] == 'LogEventsToDisplay') {
                 log.display(JSON.stringify(newE))
             } else if (window.SettingsStateModule['flags.InteractionModuleDebugMode'] == 'LogEventsToConsoleAndDisplay') {
-                console.log(newE)
+                //console.log(newE)
                 log.display(JSON.stringify(newE))
             }
             thisPassed.handlers[e.type](newE, thisPassed);
@@ -225,7 +225,7 @@ const InteractionModule = {
                 WindowState.ihs.pointerPos[2] = e.position.movementX;
                 WindowState.ihs.pointerPos[3] = e.position.movementY;
             } else {
-                console.log('Pointer down on more than two touches');
+                //console.log('Pointer down on more than two touches');
             }
         },
         pointermove(e) {

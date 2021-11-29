@@ -16,6 +16,8 @@ const langs = {
             'app.notice.menubeta': 'Beta Information',
             'app.header.managePeople': 'Manage collaboration',
             'app.header.more': 'More options',
+            'app.header.more.export': 'Export Document',
+            'app.header.more.import': 'Import Document',
             'app.header.more.settings': 'Settings',
             'app.header.more.about': 'About',
             'app.header.more.clearAllStrokes': 'Clear All Strokes',

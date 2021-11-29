@@ -98,7 +98,7 @@ function createCustomElement() {
                     const zoomMenu = [
                         {
                             type: 'menuElement',
-                            icon: 'ui/anchorRight',
+                            icon: 'ui/zoomReset',
                             onSelected() {
                                 WindowState.canvas.document.position.zoomScale = 1;
                                 WindowState.canvas.document.position.zoomScale = Math.min(Math.max(0.5, WindowState.canvas.document.position.zoomScale), 4);
@@ -110,13 +110,7 @@ function createCustomElement() {
                             name: intl.str('app.ui.zoom.resetZoom')
                         },
                         {
-                            type: 'seperator',
-                            icon: 'ui/zoomReset',
-                            onSelected() {
-                                window.SettingsStateModule['interface.dockPosition'] = 2;
-                                uiDocument.components.controlbar.barPosition = window.SettingsStateModule['interface.dockPosition'] || 0;
-                            },
-                            name: intl.str('app.ui.dockAlignment.right')
+                            type: 'seperator'
                         },
                     ]
                     let zoomlevels = [50, 70, 90, 100, 125, 150, 175, 200, 300, 350, 400]

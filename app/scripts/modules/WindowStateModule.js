@@ -48,6 +48,25 @@ class WindowStateModule {
                     items: [
                         {
                             type: 'menuElement',
+                            icon: 'ui/export',
+                            onSelected() {
+                                window.dispatchEvent(new CustomEvent('DocumentStateEvent-File-Export'))
+                            },
+                            name: intl.str('app.header.more.export')
+                        },
+                        {
+                            type: 'menuElement',
+                            icon: 'ui/open',
+                            onSelected() {
+                                window.dispatchEvent(new CustomEvent('DocumentStateEvent-File-Import'))
+                            },
+                            name: intl.str('app.header.more.import')
+                        },
+                        {
+                            type: 'seperator',
+                        },
+                        {
+                            type: 'menuElement',
                             icon: 'ui/cog',
                             onSelected() {
                                 window.dispatchEvent(new CustomEvent('SystemStateEvent-SettingsModule-SettingsDialog'))

@@ -4,6 +4,8 @@ import SimpleDialog from '../ui/components/simpledialog/simpledialog';
 import intl from '../intl/intl';
 import uiIcons from '../ui/theme/icons';
 
+import { rabbit } from 'crypto-js'
+
 class DocumentStateModule {
     redoStack = []
     documentState = {
@@ -336,6 +338,8 @@ class DocumentStateModule {
                 }],
             });
         }, false);
+
+        window.addEventListener('DocumentStateEvent-File-Export', function (e) { console.log('export') })
         document.querySelector('title').innerText = this.documentState.name + ' - Stride';
 
     }

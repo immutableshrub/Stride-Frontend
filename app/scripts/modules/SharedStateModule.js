@@ -417,11 +417,11 @@ class SharedStateModule {
                     window.sharedState.socketInstance.emit('SharedStateRelay-DSMG-ioDocumentStateUpdate', window.OTDocument_Export());
                 })
 
-                window.sharedState.socketInstance.on("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
+                window.sharedState.socketInstance.once("SharedStateRelay-DSMG-ioDocumentStateUpdate", (documentState) => {
                     //console.log(documentState);
-                    if (window.SettingsStateModule['flags.acceptDSUpdatesWhenJoined'] == true) {
-                        window.OTDocument_Import(documentState);
-                    }
+                    //if (window.SettingsStateModule['flags.acceptDSUpdatesWhenJoined'] == true) {
+                    window.OTDocument_Import(documentState);
+                    //}
                 });
 
                 setInterval(() => {

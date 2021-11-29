@@ -4,7 +4,8 @@ import SimpleDialog from '../ui/components/simpledialog/simpledialog';
 import intl from '../intl/intl';
 import uiIcons from '../ui/theme/icons';
 
-import { rabbit } from 'crypto-js'
+import rabbit from 'crypto-js/rabbit';
+import { enc } from 'crypto-js';
 
 class DocumentStateModule {
     redoStack = []
@@ -339,7 +340,12 @@ class DocumentStateModule {
             });
         }, false);
 
-        window.addEventListener('DocumentStateEvent-File-Export', function (e) { console.log('export') })
+        window.addEventListener('DocumentStateEvent-File-Export', function (e) {
+            const exportedcontents = OTDocument_Export();
+            const exported = rabbit.encrypt(exportedcontents, '');
+            console.log(exported)
+            console.log(enc.Hex.stringify(exported.ciphertext));
+        })
         document.querySelector('title').innerText = this.documentState.name + ' - Stride';
 
     }

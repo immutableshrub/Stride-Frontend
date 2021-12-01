@@ -4,8 +4,7 @@ import SimpleDialog from '../ui/components/simpledialog/simpledialog';
 import intl from '../intl/intl';
 import uiIcons from '../ui/theme/icons';
 
-import rabbit from 'crypto-js/rabbit';
-import { enc } from 'crypto-js';
+import { Rabbit, enc, SHA3 } from 'crypto-js';
 
 class DocumentStateModule {
     redoStack = []
@@ -149,9 +148,9 @@ class DocumentStateModule {
                 if (decoded[0] == this.utils.hash(pach)) {
                     let pack = JSON.parse(pach);
                     if (pack.actorID != this.currentID) {
-                        this.caretaker.align();
+                        //this.caretaker.align();
                         ops.push(pack.patchContents);
-                        this.caretaker.align();
+                        //this.caretaker.align();
                         opsHandlers.apply('pca');
                         return true;
                     }
@@ -161,6 +160,7 @@ class DocumentStateModule {
             },
             generate() {
                 let doc = new Map();
+                //this.caretaker.align();
                 let fltOps = this.caretaker.flatten();
                 //console.log(fltOps);
                 fltOps.forEach(op => {
@@ -341,10 +341,47 @@ class DocumentStateModule {
         }, false);
 
         window.addEventListener('DocumentStateEvent-File-Export', function (e) {
-            const exportedcontents = OTDocument_Export();
-            const exported = rabbit.encrypt(exportedcontents, '');
-            console.log(exported)
-            console.log(enc.Hex.stringify(exported.ciphertext));
+            const key = ''
+            const name = window.DocumentState.name;
+            const fname = name + '.bctx';
+
+            const rawData = Rabbit.encrypt(OTDocument_Export(), key).toString();
+
+            const nameEncode = new TextEncoder().encode(name);
+            const textencode = new TextEncoder().encode(rawData);
+            const dataHash = new TextEncoder().encode(SHA3(rawData, { outputLength: 512 }));
+            const generationDate = Uint8Array.from(Date.now().toString().padStart(20, '0'))
+
+            const view = new Uint8Array(textencode.length + dataHash.length + 500)
+
+            //         view.set([5, 0, 0, 0, 0, 0, 0, 0, 0, 0], 0)
+            //version            |     |           |  
+            // as               major  |           |
+            //                         minor       |
+            //                                     patch
+
+            view.set([0, 1, 0, 0, 0, 4, 0, 0, 1, 5], 0);
+            view.set(generationDate, 10)
+            view.set(nameEncode, 100);
+            view.set(dataHash, 300);
+            view.set(textencode, 500);
+
+            const dv = new DataView(view.length + 1);
+
+            view.forEach((bytes, index) => {
+                dv.setUint8(index + 1, bytes);
+            })
+
+            const fdownloadURL = URL.createObjectURL(new File([dv], fname, {
+                type: "application/octet-stream",
+            }));
+
+            const downloadElm = document.createElement('a')
+            downloadElm.setAttribute('href', fdownloadURL);
+            downloadElm.setAttribute('download', fname);
+            downloadElm.click();
+
+            //console.log(enc.Utf8.stringify(rabbit.decrypt(enc.Hex.stringify(data), '')));
         })
         document.querySelector('title').innerText = this.documentState.name + ' - Stride';
 

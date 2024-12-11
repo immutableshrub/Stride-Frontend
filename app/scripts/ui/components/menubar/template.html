@@ -1,287 +1,321 @@
 <style>
-    *,
-    *:before,
-    *:after {
-        --menubar-margin-documentUI: var(--uiTheme-layout-margin-documentUI);
-        --menubar-button-size: 60px;
-        --menubar--background-color: var(--uiTheme-background-primary);
-        --menubar--background-color-hover: var(--uiTheme-background-hover);
-        --menubar--border-color: var(--uiTheme-border-primary);
-        --menubar--animation-easing: var(--uiTheme-animations-easing-primary);
-        font-family: FFDINWeb;
-        font-weight: 400;
+  *,
+  *:before,
+  *:after {
+    --menubar-margin-documentUI: var(--uiTheme-layout-margin-documentUI);
+    --menubar-button-size: 60px;
+    --menubar--background-color: var(--uiTheme-background-primary);
+    --menubar--background-color-hover: var(--uiTheme-background-hover);
+    --menubar--border-color: var(--uiTheme-border-primary);
+    --menubar--animation-easing: var(--uiTheme-animations-easing-primary);
+    font-family: FFDINWeb;
+    font-weight: 400;
+  }
+
+  @keyframes menubar-button-in {
+    from {
+      width: 0px;
+      opacity: 0;
     }
 
-    @keyframes menubar-button-in {
-        from {
-            width: 0px;
-            opacity: 0;
-        }
+    to {
+      width: var(--menubar-button-size);
+      opacity: 1;
+    }
+  }
 
-        to {
-            width: var(--menubar-button-size);
-            opacity: 1;
-        }
+  @keyframes menubar-spacer-in {
+    from {
+      width: 0px;
+      opacity: 0;
     }
 
-    @keyframes menubar-spacer-in {
-        from {
-            width: 0px;
-            opacity: 0;
-        }
-
-        to {
-            width: 10px;
-            opacity: 1;
-        }
+    to {
+      width: 10px;
+      opacity: 1;
     }
+  }
 
+  aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"] {
+    position: fixed;
+    border: 1px solid var(--menubar--border-color);
+    background-color: var(--menubar--background-color);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: opacity 0.5s var(--menubar--animation-easing);
+    top: calc(var(--menubar-margin-documentUI) / 2);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max(calc(100vw - var(--menubar-margin-documentUI)), 800px);
+    max-width: 100vw;
+    display: flex;
+    flex-flow: row;
+    pointer-events: all;
+    opacity: 1;
+  }
+
+  @media (max-width: 800px) {
     aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"] {
-        position: fixed;
-        border: 1px solid var(--menubar--border-color);
-        background-color: var(--menubar--background-color);
-        border-radius: 6px;
-        overflow: hidden;
-        transition: opacity 0.5s var(--menubar--animation-easing);
-        top: calc(var(--menubar-margin-documentUI) / 2);
-        left: 50%;
-        transform: translateX(-50%);
-        width: max(calc(100vw - var(--menubar-margin-documentUI)), 800px);
-        max-width: 100vw;
-        display: flex;
-        flex-flow: row;
-        pointer-events: all;
-        opacity: 1;
+      top: 0px;
+      border-radius: 0px;
+      border-top: 0px;
+      border-left: 0px;
+      border-right: 0px;
     }
+  }
 
-    @media (max-width: 800px) {
-        aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"] {
-            top: 0px;
-            border-radius: 0px;
-            border-top: 0px;
-            border-left: 0px;
-            border-right: 0px;
-        }
-    }
+  aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"][uie-prop-barState="0"] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 
-    aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"][uie-prop-barState="0"] {
-        pointer-events: none;
-        opacity: 0.5;
-    }
+  section[uie-ref="menubar-documentInfo"] {
+    margin-right: auto;
+    display: flex;
+    flex-flow: row;
+  }
 
-    section[uie-ref="menubar-documentInfo"] {
-        margin-right: auto;
-        display: flex;
-        flex-flow: row;
-    }
+  div[uie-ref="menubar-documentName"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1rem;
+  }
 
-    div[uie-ref="menubar-documentName"] {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: 1rem;
-    }
+  p[uie-ref="menubar-documentName"] {
+    margin: 0px;
+    font-weight: 700;
+    outline: 0px solid transparent;
+  }
 
-    p[uie-ref="menubar-documentName"] {
-        margin: 0px;
-        font-weight: 700;
-        outline: 0px solid transparent;
-    }
+  p[uie-ref="menubar-applicationName"] {
+    margin: 0px;
+    color: var(--uiTheme-text-secondary);
+    outline: 0px solid transparent;
+    opacity: 0;
+    margin-left: 1rem;
 
-    div[uie-ref="collab-icon"] {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: var(--menubar-button-size);
-        height: var(--menubar-button-size);
-        border-radius: 0px;
-        border: 0px;
-        margin: 0px;
-        padding: 0px;
-        background-color: transparent;
-        animation: menubar-button-in 0.5s var(--menubar--animation-easing);
-        transition: 0.5s var(--menubar--animation-easing);
-        position: relative;
-    }
+    animation: playspace-whiteboard-branding-fade 5s linear;
+  }
 
-    div[uie-ref="collab-icon"] img {
-        width: 100%;
-        height: 50%;
-    }
+  div[uie-ref="collab-icon"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--menubar-button-size);
+    height: var(--menubar-button-size);
+    border-radius: 0px;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    animation: menubar-button-in 0.5s var(--menubar--animation-easing);
+    transition: 0.5s var(--menubar--animation-easing);
+    position: relative;
+  }
 
-    button[uie-ref="menubar-toolSelector-button"] {
-        display: block;
-        width: var(--menubar-button-size);
-        height: var(--menubar-button-size);
-        border-radius: 0px;
-        border: 0px;
-        margin: 0px;
-        padding: 0px;
-        background-color: transparent;
-        cursor: pointer;
-        animation: menubar-button-in 0.5s var(--menubar--animation-easing);
-        transition: 0.5s var(--menubar--animation-easing);
-        position: relative;
-    }
+  div[uie-ref="collab-icon"] img {
+    width: 100%;
+    height: 50%;
+  }
 
-    aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"] button[uie-ref="menubar-toolSelector-button"]>[uie-ref="menubar-toolSelector-toolicon"] {
-        opacity: 0.75;
-    }
+  button[uie-ref="menubar-toolSelector-button"] {
+    display: block;
+    width: var(--menubar-button-size);
+    height: var(--menubar-button-size);
+    border-radius: 0px;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    background-color: transparent;
+    cursor: pointer;
+    animation: menubar-button-in 0.5s var(--menubar--animation-easing);
+    transition: 0.5s var(--menubar--animation-easing);
+    position: relative;
+  }
 
-    aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"]:hover button[uie-ref="menubar-toolSelector-button"]>[uie-ref="menubar-toolSelector-toolicon"],
-    aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"]:focus button[uie-ref="menubar-toolSelector-button"]>[uie-ref="menubar-toolSelector-toolicon"] {
-        opacity: 1;
-    }
+  aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"]
+    button[uie-ref="menubar-toolSelector-button"]
+    > [uie-ref="menubar-toolSelector-toolicon"] {
+    opacity: 0.75;
+  }
 
-    button[uie-ref="menubar-toolSelector-button"]>* {
-        transition: 0.5s var(--menubar--animation-easing);
-    }
+  aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"]:hover
+    button[uie-ref="menubar-toolSelector-button"]
+    > [uie-ref="menubar-toolSelector-toolicon"],
+  aside.uiElement.uie-uiMenubar[uie-ref="menubar-outer"]:focus
+    button[uie-ref="menubar-toolSelector-button"]
+    > [uie-ref="menubar-toolSelector-toolicon"] {
+    opacity: 1;
+  }
 
-    button[uie-ref="menubar-toolSelector-button"]:before {
-        content: "";
-        width: var(--menubar-button-size);
-        height: var(--menubar-button-size);
-        background-color: var(--menubar--background-color-hover);
-        transition: transform 0.5s var(--menubar--animation-easing), border-radius 0.5s var(--menubar--animation-easing), opacity 0.2s linear;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        z-index: -1;
-        border-radius: 6px;
-        opacity: 0;
-        transform: scale(0.8);
-    }
+  button[uie-ref="menubar-toolSelector-button"] > * {
+    transition: 0.5s var(--menubar--animation-easing);
+  }
 
-    button[uie-ref="menubar-toolSelector-button"]:hover:before,
-    button[uie-ref="menubar-toolSelector-button"]:focus:before {
-        border-radius: 6px;
-        opacity: 0.4;
-        transform: scale(0.85);
-    }
+  button[uie-ref="menubar-toolSelector-button"]:before {
+    content: "";
+    width: var(--menubar-button-size);
+    height: var(--menubar-button-size);
+    background-color: var(--menubar--background-color-hover);
+    transition: transform 0.5s var(--menubar--animation-easing),
+      border-radius 0.5s var(--menubar--animation-easing), opacity 0.2s linear;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+    border-radius: 6px;
+    opacity: 0;
+    transform: scale(0.8);
+  }
 
-    button[uie-ref="menubar-toolSelector-button"]:active:before {
-        border-radius: 0px;
-        opacity: 0.5;
-        transform: scale(1);
-    }
+  button[uie-ref="menubar-toolSelector-button"]:hover:before,
+  button[uie-ref="menubar-toolSelector-button"]:focus:before {
+    border-radius: 6px;
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
 
-    /*    button[uie-ref="menubar-toolSelector-button"][isSelected="1"]:before {
+  button[uie-ref="menubar-toolSelector-button"]:active:before {
+    border-radius: 0px;
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  /*    button[uie-ref="menubar-toolSelector-button"][isSelected="1"]:before {
         border-radius: 0px;
         opacity: 0.25;
         transform: scale(1);
     }
 */
 
-    section[uie-ref="menubar-toolSelector"] {
-        display: flex;
+  section[uie-ref="menubar-toolSelector"] {
+    display: flex;
+  }
+
+  button[uie-ref="menubar-toolSelector-button"][isspacer="1"] {
+    pointer-events: none;
+    width: 10px;
+    animation: menubar-spacer-in 0.5s var(--menubar--animation-easing);
+  }
+
+  button[uie-ref="menubar-toolSelector-button"][isspacer="1"]:after {
+    content: "";
+    width: 0.5px;
+    left: 4.75px;
+    opacity: 0.25;
+    height: calc(var(--menubar-button-size) / 2);
+    position: absolute;
+    top: calc(var(--menubar-button-size) / 4);
+    background-color: var(--menubar--background-color-hover);
+  }
+
+  section[uie-ref="menubar-personCont"] {
+    display: flex;
+    flex-flow: row;
+    padding-right: 15px;
+    overflow: hidden;
+  }
+
+  section[uie-ref="menubar-personCont"] .person-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #000000;
+    font-size: 20px;
+    line-height: 0px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid #ffffff;
+    margin: 6px -15px 8px 0px;
+    cursor: pointer;
+    animation: menubar-profile-in 0.5s var(--menubar--animation-easing);
+    display: none;
+  }
+
+  section[uie-ref="menubar-personCont"] .person-circle.hidden {
+    animation: menubar-profile-out 0.5s var(--menubar--animation-easing);
+  }
+
+  section[uie-ref="menubar-personCont"] .person-circle:nth-child(1),
+  section[uie-ref="menubar-personCont"] .person-circle:nth-child(2),
+  section[uie-ref="menubar-personCont"] .person-circle:nth-child(3),
+  section[uie-ref="menubar-personCont"] .person-circle:nth-child(4),
+  section[uie-ref="menubar-personCont"] .person-circle:nth-child(5),
+  section[uie-ref="menubar-personCont"] .person-circle:nth-child(6),
+  section[uie-ref="menubar-personCont"] .person-circle:nth-child(7) {
+    display: flex;
+  }
+
+  section[uie-ref="menubar-personCont"] .person-circle:hover,
+  section[uie-ref="menubar-personCont"] .person-circle:focus {
+    border: 4px solid #bebebe !important;
+  }
+
+  @keyframes menubar-profile-in {
+    from {
+      width: 40px;
+      opacity: 0;
+      margin-right: -40px;
     }
 
-    button[uie-ref="menubar-toolSelector-button"][isspacer="1"] {
-        pointer-events: none;
-        width: 10px;
-        animation: menubar-spacer-in 0.5s var(--menubar--animation-easing);
+    to {
+      width: 40px;
+      opacity: 1;
+      margin-right: -15px;
+    }
+  }
+
+  @keyframes menubar-profile-out {
+    from {
+      width: 40px;
+      opacity: 1;
+      margin-right: -15px;
     }
 
-    button[uie-ref="menubar-toolSelector-button"][isspacer="1"]:after {
-        content: '';
-        width: 0.5px;
-        left: 4.75px;
-        opacity: 0.25;
-        height: calc(var(--menubar-button-size) / 2);
-        position: absolute;
-        top: calc(var(--menubar-button-size) / 4);
-        background-color: var(--menubar--background-color-hover);
+    to {
+      width: 40px;
+      opacity: 0;
+      margin-right: -40px;
+    }
+  }
+
+  @keyframes playspace-whiteboard-branding-fade {
+    0% {
+      opacity: 0.5;
     }
 
-    section[uie-ref="menubar-personCont"] {
-        display: flex;
-        flex-flow: row;
-        padding-right: 15px;
-        overflow: hidden;
+    80% {
+      opacity: 0.5;
     }
 
-    section[uie-ref="menubar-personCont"] .person-circle {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: #000000;
-        font-size: 20px;
-        line-height: 0px;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        overflow: hidden;
-        border: 4px solid #ffffff;
-        margin: 6px -15px 8px 0px;
-        cursor: pointer;
-        animation: menubar-profile-in 0.5s var(--menubar--animation-easing);
-        display: none;
+    100% {
+      opacity: 0;
     }
-
-    section[uie-ref="menubar-personCont"] .person-circle.hidden {
-        animation: menubar-profile-out 0.5s var(--menubar--animation-easing);
-    }
-
-    section[uie-ref="menubar-personCont"] .person-circle:nth-child(1),
-    section[uie-ref="menubar-personCont"] .person-circle:nth-child(2),
-    section[uie-ref="menubar-personCont"] .person-circle:nth-child(3),
-    section[uie-ref="menubar-personCont"] .person-circle:nth-child(4),
-    section[uie-ref="menubar-personCont"] .person-circle:nth-child(5),
-    section[uie-ref="menubar-personCont"] .person-circle:nth-child(6),
-    section[uie-ref="menubar-personCont"] .person-circle:nth-child(7) {
-        display: flex;
-    }
-
-    section[uie-ref="menubar-personCont"] .person-circle:hover,
-    section[uie-ref="menubar-personCont"] .person-circle:focus {
-        border: 4px solid #bebebe !important;
-    }
-
-    @keyframes menubar-profile-in {
-        from {
-            width: 40px;
-            opacity: 0;
-            margin-right: -40px;
-        }
-
-        to {
-            width: 40px;
-            opacity: 1;
-            margin-right: -15px;
-
-        }
-    }
-
-    @keyframes menubar-profile-out {
-        from {
-            width: 40px;
-            opacity: 1;
-            margin-right: -15px;
-        }
-
-        to {
-            width: 40px;
-            opacity: 0;
-            margin-right: -40px;
-
-        }
-    }
+  }
 </style>
-<aside class="uiElement uie-uiMenubar" uie-ref="menubar-outer" uie-prop-barState="1" uie-prop-active="0"
-    uie-prop-focused="-1">
-    <section uie-ref="menubar-documentInfo">
-        <div uie-ref="collab-icon"><img src="VITE_APP_ICON_URL"></div>
-        <div uie-ref="menubar-documentName">
-            <p uie-ref="menubar-documentName" contenteditable="true"></p>
-        </div>
-    </section>
-    <section uie-ref="menubar-personCont"></section>
-    <section uie-ref="menubar-toolSelector">
-    </section>
+<aside
+  class="uiElement uie-uiMenubar"
+  uie-ref="menubar-outer"
+  uie-prop-barState="1"
+  uie-prop-active="0"
+  uie-prop-focused="-1"
+>
+  <section uie-ref="menubar-documentInfo">
+    <div uie-ref="collab-icon"><img src="VITE_APP_ICON_URL" /></div>
+    <div uie-ref="menubar-documentName">
+      <p uie-ref="menubar-documentName" contenteditable="true"></p>
+      <p uie-ref="menubar-applicationName">Playspace Whiteboard</p>
+    </div>
+  </section>
+  <section uie-ref="menubar-personCont"></section>
+  <section uie-ref="menubar-toolSelector"></section>
 </aside>
 
 <template uie-template="menubar-tool">
-    <button uie-ref="menubar-toolSelector-button">
-        <div uie-ref="menubar-toolSelector-toolicon"></div>
-    </button>
+  <button uie-ref="menubar-toolSelector-button">
+    <div uie-ref="menubar-toolSelector-toolicon"></div>
+  </button>
 </template>

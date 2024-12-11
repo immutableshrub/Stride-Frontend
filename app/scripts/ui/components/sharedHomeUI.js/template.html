@@ -223,14 +223,16 @@
         background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 4.5a7.5 7.5 0 1 1-7.419 6.392c.067-.454-.265-.892-.724-.892a.749.749 0 0 0-.752.623A9 9 0 1 0 6 5.292V4.25a.75.75 0 0 0-1.5 0v3c0 .414.336.75.75.75h3a.75.75 0 0 0 0-1.5H6.9a7.473 7.473 0 0 1 5.1-2Z' fill='%23ffffff'/%3E%3C/svg%3E");
         background-position: center;
         background-repeat: no-repeat;
-        background-size: 0px;
+        background-size: 40px;
+        opacity:0;
         cursor: pointer;
-        transition: 0.5s cubic-bezier(.86, 0, .07, 1);
+        transition: 0.5s cubic-bezier(.7, 0, .86, 1);
     }
 
     section.userprofile-header>.emojicont:hover:after {
         background-color: #0000005c;
         background-size: 50px;
+        opacity:1;
     }
 
 
@@ -263,37 +265,37 @@
     </section>
     <section class="setProfile">
         <section class="joinerHeader">
-            <p>Sharing <span></span></p>
-            <h1 class="docName">Your profile</h1>
+            <p>Your Playspace Whiteboard Profile<span></span></p>
+            <h1 class="docName">Edit your Pprofile</h1>
         </section>
         <section class="userprofile-header">
             <div class="emojicont"></div>
             <input type="text" name="Name" id="inputname_0"></input>
-            <label for="inputname_0">Your name and avatatr will be visible to others on this document.</label>
+            <label for="inputname_0">Your name and avatar will be visible to others on this document.</label>
             <button>Continue</button>
         </section>
     </section>
     <section class="editProfile">
         <section class="joinerHeader">
-            <p>Sharing <span></span></p>
-            <h1 class="docName">Your profile</h1>
+            <p>You're sharing:<span></span></p>
+            <h1 class="docName">Your Playspace Whiteboard Profile</h1>
         </section>
         <section class="userprofile-header">
             <div class="emojicont"></div>
             <input type="text" name="Name" id="inputname_0"></input>
-            <label for="inputname_0">Your name and avatatr will be visible to others on this document.</label>
+            <label for="inputname_0">Your name and avatar will be visible to others on this document.</label>
             <button>Save</button>
         </section>
     </section>
     <section class="joinProfile">
         <section class="joinerHeader">
-            <p>Joining a shared document. <span></span></p>
+            <p>You're joining a shared document. <span></span></p>
             <h1 class="docName">-</h1>
         </section>
         <section class="userprofile-header">
             <div class="emojicont"></div>
             <input type="text" name="Name" id="inputname_0"></input>
-            <label for="inputname_0">Your name and avatatr will be visible to others on this document.</label>
+            <label for="inputname_0">Your name and avatar will be visible to others on this document.</label>
             <button>Save</button>
         </section>
     </section>
